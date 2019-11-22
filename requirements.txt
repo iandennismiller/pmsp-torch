@@ -1,0 +1,6 @@
+pandas
+torch
+click
+ipython
+jupyter
+matplotlib
