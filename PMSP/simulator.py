@@ -1,6 +1,7 @@
 # PMSP Torch
+# CAP Lab
 
-from .model import PlautNet
+from .model import PMSPNet
 from .stimuli import PMSPStimuli
 from .util import make_folder, write_losses
 
@@ -14,7 +15,7 @@ class Simulator:
     def __init__(self):
         torch.manual_seed(1)
 
-        self.model = PlautNet()
+        self.model = PMSPNet()
         self.folder = make_folder()
 
         self.train_loader = DataLoader(

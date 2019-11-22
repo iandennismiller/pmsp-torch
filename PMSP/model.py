@@ -1,13 +1,14 @@
 # PMSP Torch
+# CAP Lab
 
 from .stimuli import PMSPStimuli
 
 import torch
 import torch.nn as nn
 
-class PlautNet(nn.Module):
+class PMSPNet(nn.Module):
     def __init__(self):
-        super(PlautNet, self).__init__()
+        super(PMSPNet, self).__init__()
         self.layer1 = nn.Linear(105, 100)
         self.layer2 = nn.Linear(100, 61)
         self.init_weights()

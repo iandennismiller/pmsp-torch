@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# PMSP Torch
+# CAP Lab
+
 import sys
 sys.path.insert(0, '.')
 from PMSP.stimuli import PMSPStimuli
