@@ -20,6 +20,9 @@ def just_test():
     result = stimuli.generate_stimuli(percentage=0.95)
     assert(result)
 
+    sim = Simulator()
+    sim.train(num_epochs=10)
+
 @click.command('generate', short_help='Generate data.')
 @click.option('--write/--no-write', default=False, help='Write to file.')
 def generate(write):
@@ -41,7 +44,7 @@ def generate(write):
 def simulate(rate, epochs):
     sim = Simulator()
     sim.train(learning_rate=rate, num_epochs=epochs)
-    print(sim.model.layer2.bias.data)
+    # print(sim.model.layer2.bias.data)
 
 cli.add_command(generate)
 cli.add_command(just_test)
@@ -49,6 +52,6 @@ cli.add_command(simulate)
 
 if __name__ == '__main__':
     from PMSP.__meta__ import __version__
-    print("PMSP Stimuli", __version__)
+    print("pmsp-torch", __version__)
     print("")
     cli()

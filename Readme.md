@@ -4,6 +4,7 @@
 
 ```
 make requirements
+make test
 ```
 
 ## Running simulation

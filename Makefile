@@ -1,4 +1,4 @@
-all: view
+all: test
 	@echo OK
 
 run:
@@ -16,4 +16,7 @@ requirements:
 clean:
 	rm -rf ./*_test??
 
-.PHONY: all requirements clean view write
+test:
+	./pmsp.py test
+
+.PHONY: all requirements clean view write test

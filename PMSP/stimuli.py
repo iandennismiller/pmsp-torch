@@ -10,18 +10,6 @@ import re
 import copy
 from torch.utils.data import Dataset
 
-graphemes = {
-    'onset': ['Y', 'S', 'P', 'T', 'K', 'Q', 'C', 'B', 'D', 'G', 'F', 'V', 'J', 'Z', 'L', 'M', 'N', 'R', 'W', 'H', 'CH', 'GH', 'GN', 'PH', 'PS', 'RH', 'SH', 'TH', 'TS', 'WH'],
-    'vowel': ['E', 'I', 'O', 'U', 'A', 'Y', 'AI', 'AU', 'AW', 'AY', 'EA', 'EE', 'EI', 'EU', 'EW', 'EY', 'IE', 'OA', 'OE', 'OI', 'OO', 'OU', 'OW', 'OY', 'UE', 'UI', 'UY'],
-    'coda': ['H', 'R', 'L', 'M', 'N', 'B', 'D', 'G', 'C', 'X', 'F', 'V', 'J', 'S', 'Z', 'P', 'T', 'K', 'Q', 'BB', 'CH', 'CK', 'DD', 'DG', 'FF', 'GG', 'GH', 'GN', 'KS', 'LL', 'NG', 'NN', 'PH', 'PP', 'PS', 'RR', 'SH', 'SL', 'SS', 'TCH', 'TH', 'TS', 'TT', 'ZZ', 'U', 'E', 'ES', 'ED'],
-}
-
-phonemes = {
-    'onset': ['s', 'S', 'C', 'z', 'Z', 'j', 'f', 'v', 'T', 'D', 'p', 'b', 't', 'd', 'k', 'g', 'm', 'n', 'h', 'l', 'r', 'w', 'y'],
-    'vowel': ['a', 'e', 'i', 'o', 'u', '@', '^', 'A', 'E', 'I', 'O', 'U', 'W', 'Y'],
-    'coda': ['r', 'l', 'm', 'n', 'N', 'b', 'g', 'd', 'ps', 'ks', 'ts', 's', 'z', 'f', 'v', 'p', 'k', 't', 'S', 'Z', 'T', 'D', 'C', 'j'],
-}
-
 class PMSPDataset(Dataset):
     def __init__(self, df):
         self.df = df
@@ -47,10 +35,15 @@ class PMSPStimuli:
         filename = os.path.join(pathname, 'PMSPdata.txt')
 
         # load orthography and phonology
+        self.mapper = PMSPOrthoPhonoMapping()
         self.df = pd.read_csv(filename, sep="\t")
         self.df = self.df[["orth", "phon", "type"]]
-        self.df["graphemes"] = self.df["orth"].apply(lambda x: get_graphemes(x))
-        self.df["phonemes"] = self.df["phon"].apply(lambda x: get_phonemes(x))
+        self.df["graphemes"] = self.df["orth"].apply(
+            lambda x: self.mapper.get_graphemes(x)
+        )
+        self.df["phonemes"] = self.df["phon"].apply(
+            lambda x: self.mapper.get_phonemes(x)
+        )
 
         # load word frequencies
         freq_file = os.path.join(pathname, 'freq.txt')
@@ -111,77 +104,91 @@ class PMSPStimuli:
         else:
             return(1)
 
-def get_phonemes(phon):
-    # set initial phoneme vectors to zero
-    onset = [0 for i in range(len(phonemes['onset']))]
-    vowel = [0 for i in range(len(phonemes['vowel']))]
-    codas = [0 for i in range(len(phonemes['coda']))]
+class PMSPOrthoPhonoMapping:
+    def __init__(self):
+        self.graphemes = {
+            'onset': ['Y', 'S', 'P', 'T', 'K', 'Q', 'C', 'B', 'D', 'G', 'F', 'V', 'J', 'Z', 'L', 'M', 'N', 'R', 'W', 'H', 'CH', 'GH', 'GN', 'PH', 'PS', 'RH', 'SH', 'TH', 'TS', 'WH'],
+            'vowel': ['E', 'I', 'O', 'U', 'A', 'Y', 'AI', 'AU', 'AW', 'AY', 'EA', 'EE', 'EI', 'EU', 'EW', 'EY', 'IE', 'OA', 'OE', 'OI', 'OO', 'OU', 'OW', 'OY', 'UE', 'UI', 'UY'],
+            'coda': ['H', 'R', 'L', 'M', 'N', 'B', 'D', 'G', 'C', 'X', 'F', 'V', 'J', 'S', 'Z', 'P', 'T', 'K', 'Q', 'BB', 'CH', 'CK', 'DD', 'DG', 'FF', 'GG', 'GH', 'GN', 'KS', 'LL', 'NG', 'NN', 'PH', 'PP', 'PS', 'RR', 'SH', 'SL', 'SS', 'TCH', 'TH', 'TS', 'TT', 'ZZ', 'U', 'E', 'ES', 'ED'],
+        }
 
-    # drop first and last characters
-    phon = phon[1:-1]
+        self.phonemes = {
+            'onset': ['s', 'S', 'C', 'z', 'Z', 'j', 'f', 'v', 'T', 'D', 'p', 'b', 't', 'd', 'k', 'g', 'm', 'n', 'h', 'l', 'r', 'w', 'y'],
+            'vowel': ['a', 'e', 'i', 'o', 'u', '@', '^', 'A', 'E', 'I', 'O', 'U', 'W', 'Y'],
+            'coda': ['r', 'l', 'm', 'n', 'N', 'b', 'g', 'd', 'ps', 'ks', 'ts', 's', 'z', 'f', 'v', 'p', 'k', 't', 'S', 'Z', 'T', 'D', 'C', 'j'],
+        }
 
-    # scan until first vowel, if any
-    for i in range(len(phon)):
-        if phon[i] in phonemes['vowel']:
-            break
-        # any phoneme onsets are coded in the onset vector
-        if phon[i] in phonemes['onset']:
-            onset[phonemes['onset'].index(phon[i])] = 1
+    def get_phonemes(self, phon):
+        # set initial phoneme vectors to zero
+        onset = [0 for i in range(len(self.phonemes['onset']))]
+        vowel = [0 for i in range(len(self.phonemes['vowel']))]
+        codas = [0 for i in range(len(self.phonemes['coda']))]
 
-    # scan for first coda, starting from the location of the first vowel
-    for j in range(i, len(phon)):
-        if phon[j] in phonemes['coda']:
-            break
-        # any phoneme vowels are coded in the vowel vector
-        if phon[j] in phonemes['vowel']:
-            vowel[phonemes['vowel'].index(phon[j])] = 1
+        # drop first and last characters
+        phon = phon[1:-1]
 
-    # starting from location of coda, set other codas in coda vector
-    for k in range(j, len(phon)):
-        # any phoneme codas are coded in the coda vector
-        if phon[k] in phonemes['coda']:
-            codas[phonemes['coda'].index(phon[k])] = 1
-        # scan for 2-character codas, too
-        if phon[k:k+2] in phonemes['coda']:
-            codas[phonemes['coda'].index(phon[k:k+2])] = 1
+        # scan until first vowel, if any
+        for i in range(len(phon)):
+            if phon[i] in self.phonemes['vowel']:
+                break
+            # any phoneme onsets are coded in the onset vector
+            if phon[i] in self.phonemes['onset']:
+                onset[self.phonemes['onset'].index(phon[i])] = 1
 
-    return onset + vowel + codas
+        # scan for first coda, starting from the location of the first vowel
+        for j in range(i, len(phon)):
+            if phon[j] in self.phonemes['coda']:
+                break
+            # any phoneme vowels are coded in the vowel vector
+            if phon[j] in self.phonemes['vowel']:
+                vowel[self.phonemes['vowel'].index(phon[j])] = 1
 
-def get_graphemes(word):
-    word = str(word).upper()
-    if word == "NAN":
-        word = "NULL"
+        # starting from location of coda, set other codas in coda vector
+        for k in range(j, len(phon)):
+            # any phoneme codas are coded in the coda vector
+            if phon[k] in self.phonemes['coda']:
+                codas[self.phonemes['coda'].index(phon[k])] = 1
+            # scan for 2-character codas, too
+            if phon[k:k+2] in self.phonemes['coda']:
+                codas[self.phonemes['coda'].index(phon[k:k+2])] = 1
 
-    # set initial grapheme vectors to zero
-    onset = [0 for i in range(len(graphemes['onset']))]
-    vowel = [0 for i in range(len(graphemes['vowel']))]
-    codas = [0 for i in range(len(graphemes['coda']))]
+        return onset + vowel + codas
 
-    # for onset
-    for i in range(len(word)):
-        if word[i] in graphemes['vowel']:
-            break
-        if word[i] in graphemes['onset']:
-            onset[graphemes['onset'].index(word[i])] = 1
-        if word[i:i+2] in graphemes['onset']:
-            onset[graphemes['onset'].index(word[i:i+2])] = 1
+    def get_graphemes(self, word):
+        word = str(word).upper()
+        if word == "NAN":
+            word = "NULL"
 
-    vowel[graphemes['vowel'].index(word[i])] = 1
+        # set initial grapheme vectors to zero
+        onset = [0 for i in range(len(self.graphemes['onset']))]
+        vowel = [0 for i in range(len(self.graphemes['vowel']))]
+        codas = [0 for i in range(len(self.graphemes['coda']))]
 
-    if i + 1 < len(word):
-        if word[i+1] in graphemes['vowel']:
-            vowel[graphemes['vowel'].index(word[i+1])] = 1
-        if word[i:i+2] in graphemes['vowel']:
-            vowel[graphemes['vowel'].index(word[i:i+2])] = 1
-        if word[i+1] in graphemes['vowel'] or word[i:i+2] in graphemes['vowel']:
-            i += 1
+        # for onset
+        for i in range(len(word)):
+            if word[i] in self.graphemes['vowel']:
+                break
+            if word[i] in self.graphemes['onset']:
+                onset[self.graphemes['onset'].index(word[i])] = 1
+            if word[i:i+2] in self.graphemes['onset']:
+                onset[self.graphemes['onset'].index(word[i:i+2])] = 1
 
-    for j in range(i+1, len(word)):
-        if word[j] in graphemes['coda']:
-            codas[graphemes['coda'].index(word[j])] = 1
-        if word[j:j+2] in graphemes['coda']:
-            codas[graphemes['coda'].index(word[j:j+2])] = 1
-        if word[j:j+3] in graphemes['coda']:
-            codas[graphemes['coda'].index(word[j:j+3])] = 1
+        vowel[self.graphemes['vowel'].index(word[i])] = 1
 
-    return onset + vowel + codas
+        if i + 1 < len(word):
+            if word[i+1] in self.graphemes['vowel']:
+                vowel[self.graphemes['vowel'].index(word[i+1])] = 1
+            if word[i:i+2] in self.graphemes['vowel']:
+                vowel[self.graphemes['vowel'].index(word[i:i+2])] = 1
+            if word[i+1] in self.graphemes['vowel'] or word[i:i+2] in self.graphemes['vowel']:
+                i += 1
+
+        for j in range(i+1, len(word)):
+            if word[j] in self.graphemes['coda']:
+                codas[self.graphemes['coda'].index(word[j])] = 1
+            if word[j:j+2] in self.graphemes['coda']:
+                codas[self.graphemes['coda'].index(word[j:j+2])] = 1
+            if word[j:j+3] in self.graphemes['coda']:
+                codas[self.graphemes['coda'].index(word[j:j+3])] = 1
+
+        return onset + vowel + codas
