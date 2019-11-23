@@ -4,3 +4,4 @@ click
 ipython
 jupyter
 matplotlib
+torchsummary

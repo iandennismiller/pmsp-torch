@@ -9,6 +9,7 @@ from PMSP.stimuli import PMSPStimuli
 from PMSP.simulator import Simulator
 
 import click
+from torchsummary import summary
 
 @click.group()
 def cli():
@@ -21,7 +22,8 @@ def just_test():
     assert(result)
 
     sim = Simulator()
-    sim.train(num_epochs=10)
+    summary(sim.model, input_size=(1, 1, sim.model.input_size))
+    sim.train(num_epochs=3)
 
 @click.command('generate', short_help='Generate data.')
 @click.option('--write/--no-write', default=False, help='Write to file.')

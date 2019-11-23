@@ -9,8 +9,13 @@ import torch.nn as nn
 class PMSPNet(nn.Module):
     def __init__(self):
         super(PMSPNet, self).__init__()
-        self.layer1 = nn.Linear(105, 100)
-        self.layer2 = nn.Linear(100, 61)
+
+        self.input_size = 105
+        self.hidden_size = 100
+        self.output_size = 61
+
+        self.layer1 = nn.Linear(self.input_size, self.hidden_size)
+        self.layer2 = nn.Linear(self.hidden_size, self.output_size)
         self.init_weights()
 
     def init_weights(self):
@@ -18,14 +23,11 @@ class PMSPNet(nn.Module):
 
         self.layer1.weight.data.uniform_(-initrange, initrange)
         self.layer1.bias.data.uniform_(-1.85, -1.85)
-        # self.layer1.bias.data.zero_()
         
         self.layer2.weight.data.uniform_(-initrange, initrange)
         self.layer2.bias.data.uniform_(-1.85, -1.85)
-        # .zero_()
 
     def forward(self, x):
         x = torch.sigmoid(self.layer1(x))
         x = torch.sigmoid(self.layer2(x))
-        # x = self.layer2(x)
         return x

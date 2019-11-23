@@ -20,7 +20,7 @@ class Simulator:
 
         self.train_loader = DataLoader(
             PMSPStimuli().dataset,
-            batch_size=100,
+            batch_size=int(len(PMSPStimuli().dataset)/30),
             num_workers=0
         )
 
