@@ -32,7 +32,7 @@ class PMSPDataset(Dataset):
 class PMSPStimuli:
     def __init__(self):
         pathname = os.path.dirname(inspect.getfile(self.__class__))
-        filename = os.path.join(pathname, 'PMSPdata.txt')
+        filename = os.path.join(pathname, 'data', 'pmsp-data.tsv')
 
         # load orthography and phonology
         self.mapper = PMSPOrthoPhonoMapping()
@@ -46,7 +46,7 @@ class PMSPStimuli:
         )
 
         # load word frequencies
-        freq_file = os.path.join(pathname, 'freq.txt')
+        freq_file = os.path.join(pathname, 'data', 'freq.csv')
         df_freq = pd.read_csv(freq_file, header=0)
         self.frequencies = {}
         for index, row in df_freq.iterrows():
