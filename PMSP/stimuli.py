@@ -10,6 +10,9 @@ import re
 import copy
 from torch.utils.data import Dataset
 
+# do not warn about assignment to a copy of a pandas object
+pd.options.mode.chained_assignment = None
+
 class PMSPDataset(Dataset):
     def __init__(self, df):
         self.df = df
@@ -18,16 +21,11 @@ class PMSPDataset(Dataset):
         return len(self.df)
     
     def __getitem__(self, index):
-        buf = {
-            "type": self.df.loc[index, "type"],
-            "orth": self.df.loc[index, "orth"],
-            "phon": self.df.loc[index, "phon"],
-            "frequency": torch.tensor(self.df.loc[index, "frequency"]),
-            "graphemes": torch.tensor(self.df.loc[index, 'graphemes']),
-            "phonemes": torch.tensor(self.df.loc[index, 'phonemes'])
-        }
-
-        return(buf)
+        return(
+            torch.tensor(self.df.loc[index, "frequency"]),
+            torch.tensor(self.df.loc[index, 'graphemes']),
+            torch.tensor(self.df.loc[index, 'phonemes'])
+        )
 
 class PMSPStimuli:
     def __init__(self):
@@ -69,8 +67,8 @@ class PMSPStimuli:
             'testing': "",
         }
 
-        full_set = set(range(0, len(self.dataset)))
-        training_set = set(random.sample(full_set, int(len(self.dataset) * percentage)))
+        full_set = set(range(0, len(self.df)))
+        training_set = set(random.sample(full_set, int(len(self.df) * percentage)))
         testing_set = full_set.difference(training_set)
 
         sets = [
@@ -81,17 +79,18 @@ class PMSPStimuli:
         for current_buffer, current_set in sets:
             count = 0
             for idx in current_set:
-                item = copy.copy(self.dataset[idx])
+                # item = copy.copy(self.dataset[idx])
+                item = self.df.iloc[idx, : ]
                 item['phon'] = re.sub(r'\W', '', item['phon'])
                 if item['type'] == '#': item['type'] = '0'
                 buffer[current_buffer] += "name: {{{count}_{orth}_{phon}_{type}}}\n".format(count=count, **item)
 
                 buffer[current_buffer] += "freq: {0:.9f}\n".format(item['frequency'])
 
-                in_vec = ' '.join(str(x) for x in item['graphemes'].tolist())
+                in_vec = ' '.join(str(x) for x in item['graphemes'])
                 buffer[current_buffer] += "I: {}\n".format(in_vec)
 
-                target_vec = ' '.join(str(x) for x in item['phonemes'].tolist())
+                target_vec = ' '.join(str(x) for x in item['phonemes'])
                 buffer[current_buffer] += "T: {};\n\n".format(target_vec)
                 count += 1
 

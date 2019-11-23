@@ -11,12 +11,41 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 import matplotlib.pyplot as plt
 
+def to_device(data, device):
+    if isinstance(data, (list, tuple)):
+        return [to_device(x, device) for x in data]
+    elif isinstance(data, (dict)):
+        print(data)
+        d = dict([ (k, to_device(v, device)) for k, v in data ])
+        print(d)
+        return d
+    return data.to(device, non_blocking=True)
+
+def get_default_device():
+    if torch.cuda.is_available():
+        return torch.device('cuda')
+    else:
+        return torch.device('cpu')
+
+class DeviceDataLoader:
+    def __init__(self, dl, device):
+        self.dl = dl
+        self.device = get_default_device()
+
+    def __iter__(self):
+        for b in self.dl:
+            yield to_device(b, self.device)
+
+    def __len__(self):
+        return len(self.dl)
+
 class Simulator:
     def __init__(self, batch_size=None, num_workers=None):
         torch.manual_seed(1)
 
         self.folder = make_folder()
         self.model = PMSPNet()
+
         if torch.cuda.is_available():
             print("using CUDA")
             self.model.cuda()
@@ -31,10 +60,15 @@ class Simulator:
         if not num_workers:
             num_workers = 0
 
-        self.train_loader = DataLoader(
+        tmp_loader = DataLoader(
             self.dataset,
             batch_size=batch_size,
             num_workers=num_workers
+        )
+
+        self.train_loader = DeviceDataLoader(
+            tmp_loader,
+            get_default_device()
         )
 
     def train(self, learning_rate=0.001, num_epochs=300):
@@ -45,9 +79,10 @@ class Simulator:
         for epoch in range(num_epochs):
             avg_loss = 0
             for i, data in enumerate(self.train_loader):
-                freq = data["frequency"].float().view(-1, 1)
-                inputs = data["graphemes"].float()
-                targets = data["phonemes"].float()
+                (frequency, graphemes, phonemes) = data
+                freq = frequency.float().view(-1, 1)
+                inputs = graphemes.float()
+                targets = phonemes.float()
                 
                 # forward pass
                 outputs = self.model(inputs)
