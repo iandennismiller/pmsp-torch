@@ -12,16 +12,23 @@ from torch.utils.data import Dataset, DataLoader
 import matplotlib.pyplot as plt
 
 class Simulator:
-    def __init__(self):
+    def __init__(self, batch_size=None, num_workers=None):
         torch.manual_seed(1)
 
-        self.model = PMSPNet()
         self.folder = make_folder()
+        self.model = PMSPNet()
+        self.dataset = PMSPStimuli().dataset
+
+        if not batch_size:
+            batch_size = int(len(self.dataset)/30)
+
+        if not num_workers:
+            num_workers = 0
 
         self.train_loader = DataLoader(
-            PMSPStimuli().dataset,
-            batch_size=int(len(PMSPStimuli().dataset)/30),
-            num_workers=0
+            self.dataset,
+            batch_size=batch_size,
+            num_workers=num_workers
         )
 
     def train(self, learning_rate=0.001, num_epochs=300):
