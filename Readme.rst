@@ -39,3 +39,20 @@ Writing stimuli to a file
 ::
 
     make write
+
+Code Example
+------------
+
+This works in Jupyter or Google Colab:
+
+https://colab.research.google.com
+
+::
+
+    from PMSP.stimuli import PMSPStimuli
+    from PMSP.simulator import Simulator
+    from PMSP.util import make_losses_figure
+
+    sim = Simulator()
+    sim.train(num_epochs=400)
+    make_losses_figure(sim.losses)
