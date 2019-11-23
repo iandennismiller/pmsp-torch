@@ -74,7 +74,7 @@ class Simulator:
     def train(self, learning_rate=0.001, num_epochs=300):
         criterion = nn.BCELoss(reduction='none')
         optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)
-        losses = []
+        self.losses = []
 
         for epoch in range(num_epochs):
             avg_loss = 0
@@ -101,8 +101,8 @@ class Simulator:
             
             # create record of loss per epoch
             avg_loss = avg_loss / len(self.train_loader)
-            losses.append(avg_loss)
+            self.losses.append(avg_loss)
             print("[EPOCH {}] loss: {:.10f}".format(epoch+1, avg_loss))
 
         # write plot of loss over time
-        write_losses(losses, self.folder)
+        write_losses(self.losses, self.folder)
