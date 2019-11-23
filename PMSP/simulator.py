@@ -17,6 +17,12 @@ class Simulator:
 
         self.folder = make_folder()
         self.model = PMSPNet()
+        if torch.cuda.is_available():
+            print("using CUDA")
+            self.model.cuda()
+        else:
+            print("using CPU")
+
         self.dataset = PMSPStimuli().dataset
 
         if not batch_size:
