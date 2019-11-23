@@ -5,12 +5,16 @@ import os
 import datetime
 import matplotlib.pyplot as plt
 
-def write_losses(losses, folder):
+def make_losses_figure(losses):
     plt.figure()
     plt.title("Training Curve")
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
     plt.plot(losses, label="Training Loss")
+    return plt
+
+def write_losses(losses, folder):
+    plt = make_losses_figure(losses)
     plt.savefig(folder+"/lossplot_final.png", dpi=150)
     plt.close()
 
