@@ -11,7 +11,7 @@ def read(*rnames):
 
 def grep(attrname):
     pattern = r"{0}\W*=\W*'([^']+)'".format(attrname)
-    strval, = re.findall(pattern, read('diamond_patterns/__meta__.py'))
+    strval, = re.findall(pattern, read('PMSP/__meta__.py'))
     return strval
 
 

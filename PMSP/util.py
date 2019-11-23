@@ -20,10 +20,13 @@ def make_folder():
     now = datetime.datetime.now()
     date = now.strftime("%b").lower()+now.strftime("%d")
 
+    if not os.path.isdir(os.path.join(path, 'build')):
+        os.mkdir(os.path.join(path, 'build'))
+
     i = 1
     while True:
         try:
-            rootdir = path+"/"+date+"_test"+'{:02d}'.format(i)
+            rootdir = path+"/build/"+date+"_test"+'{:02d}'.format(i)
             os.mkdir(rootdir)
             break
         except:

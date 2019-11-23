@@ -17,6 +17,10 @@ requirements:
 	pip install -r requirements.txt
 
 clean:
-	rm -rf ./*_test??
+	rm -rf build
+	rm -rf pmsp_torch.egg-info
+
+install:
+	python ./setup.py install
 
 .PHONY: all requirements clean view write test

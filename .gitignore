@@ -1,3 +1,4 @@
 *.pyc
 /build
-/*_test??/
+/pmsp_torch.egg-info
+/dist
