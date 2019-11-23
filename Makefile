@@ -1,22 +1,22 @@
 all: test
 	@echo OK
 
+test:
+	bin/pmsp.py test
+
 run:
-	./pmsp.py simulate
+	bin/pmsp.py simulate
 
 view:
-	./pmsp.py generate
+	bin/pmsp.py generate
 
 write:
-	./pmsp.py generate --write
+	bin/pmsp.py generate --write
 
 requirements:
 	pip install -r requirements.txt
 
 clean:
 	rm -rf ./*_test??
-
-test:
-	./pmsp.py test
 
 .PHONY: all requirements clean view write test
