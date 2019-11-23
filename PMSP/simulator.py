@@ -40,8 +40,9 @@ class DeviceDataLoader:
         return len(self.dl)
 
 class Simulator:
-    def __init__(self, batch_size=None, num_workers=None):
-        torch.manual_seed(1)
+    def __init__(self, batch_size=None, num_workers=None, deterministic=True):
+        if deterministic:
+            torch.manual_seed(1)
 
         self.folder = make_folder()
         self.model = PMSPNet()
