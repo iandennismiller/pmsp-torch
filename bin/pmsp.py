@@ -10,6 +10,7 @@ from PMSP.simulator import Simulator
 
 import os
 import click
+import logging
 from torchsummary import summary
 
 @click.group()
@@ -60,7 +61,14 @@ cli.add_command(just_test)
 cli.add_command(simulate)
 
 if __name__ == '__main__':
+    if not os.path.isdir('var'):
+        os.mkdir('var')
+
+    logging.basicConfig(
+        filename='var/pmsp.log',
+        level=logging.INFO
+    )
+
     from PMSP.__meta__ import __version__
     print("pmsp-torch", __version__)
-    print("")
     cli()

@@ -5,6 +5,7 @@ from .model import PMSPNet
 from .stimuli import PMSPStimuli
 from .util import make_folder, write_losses
 
+import logging
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -14,11 +15,6 @@ import matplotlib.pyplot as plt
 def to_device(data, device):
     if isinstance(data, (list, tuple)):
         return [to_device(x, device) for x in data]
-    elif isinstance(data, (dict)):
-        print(data)
-        d = dict([ (k, to_device(v, device)) for k, v in data ])
-        print(d)
-        return d
     return data.to(device, non_blocking=True)
 
 def get_default_device():
@@ -48,10 +44,10 @@ class Simulator:
         self.model = PMSPNet()
 
         if torch.cuda.is_available():
-            print("using CUDA")
+            logging.info("using CUDA")
             self.model.cuda()
         else:
-            print("using CPU")
+            logging.info("using CPU")
 
         self.dataset = PMSPStimuli().dataset
 
@@ -72,7 +68,7 @@ class Simulator:
             get_default_device()
         )
 
-    def train(self, learning_rate=0.001, num_epochs=300):
+    def train(self, learning_rate=0.001, num_epochs=300, update_interval=10):
         criterion = nn.BCELoss(reduction='none')
         optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)
         self.losses = []
@@ -103,7 +99,12 @@ class Simulator:
             # create record of loss per epoch
             avg_loss = avg_loss / len(self.train_loader)
             self.losses.append(avg_loss)
-            print("[EPOCH {}] loss: {:.10f}".format(epoch+1, avg_loss))
+
+            msg = "[EPOCH {}] loss: {:.10f}".format(epoch+1, avg_loss)
+            if epoch % update_interval == 0:
+                logging.info(msg)
+            else:
+                logging.debug(msg)
 
         # write plot of loss over time
         write_losses(self.losses, self.folder)
