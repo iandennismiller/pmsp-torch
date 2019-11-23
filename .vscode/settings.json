@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/Users/idm/.virtualenvs/pmsp-torch/bin/python"
+    "python.pythonPath": "/Users/idm/.virtualenvs/pmsp-torch/bin/python",
+    "restructuredtext.confPath": ""
 }
