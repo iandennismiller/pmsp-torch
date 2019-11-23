@@ -17,8 +17,8 @@ requirements:
 	pip install -r requirements.txt
 
 clean:
-	rm -rf build
-	rm -rf pmsp_torch.egg-info
+	rm -rf build dist pmsp_torch.egg-info var/stimuli var/results
+	-rmdir var
 
 install:
 	python ./setup.py install

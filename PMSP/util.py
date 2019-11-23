@@ -16,17 +16,19 @@ def write_losses(losses, folder):
 
 def make_folder():
     # create a new folder for each run
-    path = os.getcwd()
     now = datetime.datetime.now()
     date = now.strftime("%b").lower()+now.strftime("%d")
 
-    if not os.path.isdir(os.path.join(path, 'build')):
-        os.mkdir(os.path.join(path, 'build'))
+    path = os.getcwd()
+    if not os.path.isdir(os.path.join(path, 'var')):
+        os.mkdir(os.path.join(path, 'var'))
+    if not os.path.isdir(os.path.join(path, 'var', 'results')):
+        os.mkdir(os.path.join(path, 'var', 'results'))
 
     i = 1
     while True:
         try:
-            rootdir = path+"/build/"+date+"_test"+'{:02d}'.format(i)
+            rootdir = path+"/var/results/"+date+"_test"+'{:02d}'.format(i)
             os.mkdir(rootdir)
             break
         except:

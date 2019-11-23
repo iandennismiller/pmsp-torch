@@ -8,6 +8,7 @@ sys.path.insert(0, '.')
 from PMSP.stimuli import PMSPStimuli
 from PMSP.simulator import Simulator
 
+import os
 import click
 from torchsummary import summary
 
@@ -32,9 +33,15 @@ def generate(write):
     result = stimuli.generate_stimuli(percentage=0.95)
 
     if write:
-        with open('build/pmsp-regular-train.ex', 'w') as f:
+        path = os.getcwd()
+        if not os.path.isdir(os.path.join(path, 'var')):
+            os.mkdir(os.path.join(path, 'var'))
+        if not os.path.isdir(os.path.join(path, 'var', 'stimuli')):
+            os.mkdir(os.path.join(path, 'var', 'stimuli'))
+
+        with open('var/stimuli/pmsp-regular-train.ex', 'w') as f:
             f.write(result['training'])
-        with open('build/pmsp-regular-test.ex', 'w') as f:
+        with open('var/stimuli/pmsp-regular-test.ex', 'w') as f:
             f.write(result['testing'])
     else:
         print(result['training'])

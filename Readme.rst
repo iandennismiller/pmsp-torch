@@ -10,9 +10,14 @@ Installation
     make requirements
     make test
 
+Or install straight from git
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ::
 
     pip install git+https://projects.sisrlab.com/cap-lab/pmsp-torch@master
+    pmsp.py test
+    pmsp.py simulate
 
 Running simulation
 ------------------

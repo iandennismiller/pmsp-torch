@@ -1,4 +1,5 @@
 *.pyc
-/build
 /pmsp_torch.egg-info
+/build
 /dist
+/var
