@@ -1,7 +1,7 @@
 # PMSP Torch
 # CAP Lab
 
-from .model import PMSPNet
+from .model import PMSPNet, PMSPDoubleNet
 from .stimuli import PMSPStimuli
 from .util import make_folder, write_losses
 
@@ -41,7 +41,8 @@ class Simulator:
             torch.manual_seed(1)
 
         self.folder = make_folder()
-        self.model = PMSPNet()
+        # self.model = PMSPNet()
+        self.model = PMSPDoubleNet()
 
         if torch.cuda.is_available():
             logging.info("using CUDA")
