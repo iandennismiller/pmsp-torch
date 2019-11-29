@@ -14,14 +14,14 @@ class Simulator:
         if deterministic:
             torch.manual_seed(1)
 
-        self.folder = make_folder()
-        self.model = model
-
         if torch.cuda.is_available():
             logging.info("using CUDA")
-            self.model.cuda()
+            model.cuda()
         else:
             logging.info("using CPU")
+
+        self.folder = make_folder()
+        self.model = model
 
     def go(self, learning_rate=0.001, update_interval=10, num_epochs=300):
         self.losses = []

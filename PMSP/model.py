@@ -91,17 +91,18 @@ class PMSPDoubleNet(Trainable):
         self.criterion = nn.BCELoss(reduction='none')
         self.optimizer = optim.Adam(self.parameters(), lr=learning_rate)
 
-    def init_weights(self):
-        initrange = 0.1
+    def init_weights(self, initrange=0.1):
+        layers = [
+            self.layer1,
+            self.layer2,
+            self.layer3,
+            self.layer4,
+            self.layer5
+        ]
 
-        self.layer1.weight.data.uniform_(-initrange, initrange)
-        self.layer1.bias.data.uniform_(-1.85, -1.85)
-        
-        self.layer2.weight.data.uniform_(-initrange, initrange)
-        self.layer2.bias.data.uniform_(-1.85, -1.85)
-
-        self.layer3.weight.data.uniform_(-initrange, initrange)
-        self.layer3.bias.data.uniform_(-1.85, -1.85)
+        for layer in layers:
+            layer.weight.data.uniform_(-initrange, initrange)
+            layer.bias.data.uniform_(-1.85, -1.85)
 
     def forward(self, x):
         x = torch.sigmoid(self.layer1(x))
