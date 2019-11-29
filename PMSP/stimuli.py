@@ -8,7 +8,9 @@ import torch
 import random
 import re
 import copy
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
+
+from .device_data_loader import DeviceDataLoader, get_default_device
 
 # do not warn about assignment to a copy of a pandas object
 pd.options.mode.chained_assignment = None
@@ -60,6 +62,17 @@ class PMSPStimuli:
         )
 
         self.dataset = PMSPDataset(self.df)
+
+        tmp_loader = DataLoader(
+            self.dataset,
+            batch_size=int(len(self.dataset)/30),
+            num_workers=0
+        )
+
+        self.train_loader = DeviceDataLoader(
+            tmp_loader,
+            get_default_device()
+        )
 
     def generate_stimuli(self, percentage=0.5):
         buffer = {
