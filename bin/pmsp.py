@@ -6,7 +6,7 @@
 import sys
 sys.path.insert(0, '.')
 from PMSP.stimuli import PMSPStimuli
-from PMSP.model import PMSPDoubleNet, PMSPNet
+from PMSP.model import PMSPNet
 from PMSP.simulator import Simulator
 
 import os
@@ -24,7 +24,7 @@ def just_test():
     result = stimuli.generate_stimuli(percentage=0.95)
     assert(result)
 
-    sim = Simulator(model=PMSPDoubleNet())
+    sim = Simulator(model=PMSPNet())
     summary(sim.model, input_size=(1, 1, sim.model.input_size))
     sim.go(num_epochs=3)
 
@@ -53,7 +53,7 @@ def generate(write):
 @click.option('--rate', default=0.001, help='Learning rate.')
 @click.option('--epochs', default=300, help='Number of epochs.')
 def simulate(rate, epochs):
-    sim = Simulator(model=PMSPDoubleNet(learning_rate=rate))
+    sim = Simulator(model=PMSPNet(learning_rate=rate))
     sim.go(num_epochs=epochs)
 
 cli.add_command(generate)
