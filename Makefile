@@ -14,7 +14,7 @@ view:
 
 stimuli:
 	bin/pmsp.py generate \
-		--infile PMSP/data/pmsp-data.csv \
+		--infile PMSP/data/plaut_dataset_collapsed.csv \
 		--outfile $(LENS_WORKPATH)/pmsp-train.ex
 
 	bin/pmsp.py generate \
