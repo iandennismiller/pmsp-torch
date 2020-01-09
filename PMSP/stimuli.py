@@ -30,13 +30,13 @@ class PMSPDataset(Dataset):
         )
 
 class PMSPStimuli:
-    def __init__(self):
+    def __init__(self, filename='pmsp-data.csv'):
         pathname = os.path.dirname(inspect.getfile(self.__class__))
-        filename = os.path.join(pathname, 'data', 'pmsp-data.tsv')
+        filename = os.path.join(pathname, 'data', filename)
 
         # load orthography and phonology
         self.mapper = PMSPOrthoPhonoMapping()
-        self.df = pd.read_csv(filename, sep="\t")
+        self.df = pd.read_csv(filename, sep=",")
         self.df = self.df[["orth", "phon", "type"]]
         self.df["graphemes"] = self.df["orth"].apply(
             lambda x: self.mapper.get_graphemes(x)
@@ -46,7 +46,7 @@ class PMSPStimuli:
         )
 
         # load word frequencies
-        freq_file = os.path.join(pathname, 'data', 'freq.csv')
+        freq_file = os.path.join(pathname, 'data', 'word-frequencies.csv')
         df_freq = pd.read_csv(freq_file, header=0)
         self.frequencies = {}
         for index, row in df_freq.iterrows():
@@ -65,7 +65,7 @@ class PMSPStimuli:
 
         tmp_loader = DataLoader(
             self.dataset,
-            batch_size=int(len(self.dataset)/30),
+            batch_size=len(self.dataset),
             num_workers=0
         )
 
@@ -74,7 +74,28 @@ class PMSPStimuli:
             get_default_device()
         )
 
-    def generate_stimuli(self, percentage=0.5):
+    def generate_stimuli(self):
+        result = ""
+        count = 0
+
+        for idx in range(0, len(self.df)):
+            item = self.df.iloc[idx, : ]
+            item['phon'] = re.sub(r'\W', '', item['phon'])
+            if item['type'] == '#': item['type'] = '0'
+            result += "name: {{{count}_{orth}_{phon}_{type}}}\n".format(count=count, **item)
+
+            result += "freq: {0:.9f}\n".format(item['frequency'])
+
+            in_vec = ' '.join(str(x) for x in item['graphemes'])
+            result += "I: {}\n".format(in_vec)
+
+            target_vec = ' '.join(str(x) for x in item['phonemes'])
+            result += "T: {};\n\n".format(target_vec)
+            count += 1
+
+        return(result)
+
+    def generate_stimuli_crossvalid(self, percentage=0.5):
         buffer = {
             'training': "",
             'testing': "",

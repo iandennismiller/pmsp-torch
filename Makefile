@@ -10,8 +10,26 @@ run:
 view:
 	bin/pmsp.py generate
 
-write:
-	bin/pmsp.py generate --write
+stimuli:
+	bin/pmsp.py generate --write \
+		--infile pmsp-data.csv \
+		--outfile pmsp-train.ex
+
+	bin/pmsp.py generate --write \
+		--infile anchors_new1.csv \
+		--outfile anchors-n1.ex
+
+	bin/pmsp.py generate --write \
+		--infile anchors_new2.csv \
+		--outfile anchors-n2.ex
+
+	bin/pmsp.py generate --write \
+		--infile anchors_new3.csv \
+		--outfile anchors-n3.ex
+
+	bin/pmsp.py generate --write \
+		--infile probes_new.csv \
+		--outfile probes-new.ex
 
 requirements:
 	pip install -r requirements.txt

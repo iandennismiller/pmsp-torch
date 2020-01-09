@@ -30,9 +30,11 @@ def just_test():
 
 @click.command('generate', short_help='Generate data.')
 @click.option('--write/--no-write', default=False, help='Write to file.')
-def generate(write):
-    stimuli = PMSPStimuli()
-    result = stimuli.generate_stimuli(percentage=0.95)
+@click.option('--infile', default='pmsp-data.csv', help='File to read from.')
+@click.option('--outfile', default=None, help='File to write to.')
+def generate(write, infile, outfile):
+    stimuli = PMSPStimuli(infile)
+    result = stimuli.generate_stimuli()
 
     if write:
         path = os.getcwd()
@@ -41,13 +43,14 @@ def generate(write):
         if not os.path.isdir(os.path.join(path, 'var', 'stimuli')):
             os.mkdir(os.path.join(path, 'var', 'stimuli'))
 
-        with open('var/stimuli/pmsp-regular-train.ex', 'w') as f:
-            f.write(result['training'])
-        with open('var/stimuli/pmsp-regular-test.ex', 'w') as f:
-            f.write(result['testing'])
+        if not outfile:
+            outfile = infile
+
+        outfilename = os.path.join(path, 'var', 'stimuli', outfile)
+        with open(outfilename, 'w') as f:
+            f.write(result)
     else:
-        print(result['training'])
-        print(result['testing'])
+        print(result)
 
 @click.command('simulate', short_help='Run simulation training.')
 @click.option('--rate', default=0.001, help='Learning rate.')

@@ -56,3 +56,10 @@ https://colab.research.google.com
     sim = Simulator()
     sim.train(num_epochs=400)
     make_losses_figure(sim.losses)
+
+Windows Torch Installation
+--------------------------
+
+::
+
+    pip3 install torch===1.3.1 -f https://download.pytorch.org/whl/torch_stable.html
