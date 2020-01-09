@@ -29,28 +29,13 @@ def just_test():
     sim.go(num_epochs=3)
 
 @click.command('generate', short_help='Generate data.')
-@click.option('--write/--no-write', default=False, help='Write to file.')
-@click.option('--infile', default='pmsp-data.csv', help='File to read from.')
-@click.option('--outfile', default=None, help='File to write to.')
-def generate(write, infile, outfile):
+@click.option('--infile', required=True, help='File to read from.')
+@click.option('--outfile', required=True, help='File to write to.')
+def generate(infile, outfile):
     stimuli = PMSPStimuli(infile)
     result = stimuli.generate_stimuli()
-
-    if write:
-        path = os.getcwd()
-        if not os.path.isdir(os.path.join(path, 'var')):
-            os.mkdir(os.path.join(path, 'var'))
-        if not os.path.isdir(os.path.join(path, 'var', 'stimuli')):
-            os.mkdir(os.path.join(path, 'var', 'stimuli'))
-
-        if not outfile:
-            outfile = infile
-
-        outfilename = os.path.join(path, 'var', 'stimuli', outfile)
-        with open(outfilename, 'w') as f:
-            f.write(result)
-    else:
-        print(result)
+    with open(outfile, 'w') as f:
+        f.write(result)
 
 @click.command('simulate', short_help='Run simulation training.')
 @click.option('--rate', default=0.001, help='Learning rate.')

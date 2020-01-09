@@ -30,13 +30,22 @@ class PMSPDataset(Dataset):
         )
 
 class PMSPStimuli:
-    def __init__(self, filename='pmsp-data.csv'):
+    def __init__(self, filename=None):
         pathname = os.path.dirname(inspect.getfile(self.__class__))
-        filename = os.path.join(pathname, 'data', filename)
+        if not filename:
+            filename = os.path.join(pathname, 'data', filename)
 
         # load orthography and phonology
         self.mapper = PMSPOrthoPhonoMapping()
         self.df = pd.read_csv(filename, sep=",")
+
+        # If there is a column called "freq" in the dataset, then use that
+        try:
+            freqs = self.df["freq"]
+            lookup_frequencies = False
+        except:
+            lookup_frequencies = True
+
         self.df = self.df[["orth", "phon", "type"]]
         self.df["graphemes"] = self.df["orth"].apply(
             lambda x: self.mapper.get_graphemes(x)
@@ -52,14 +61,19 @@ class PMSPStimuli:
         for index, row in df_freq.iterrows():
             self.frequencies[row['WORD']] = row['KFFRQ']
 
+        # assign frequencies
+        if lookup_frequencies:
+            self.df["frequency"] = self.df["orth"].apply(
+                lambda x: self.get_frequency(x)
+            )
+        else:
+            self.df["frequency"] = freqs
+
         # standardize frequency
-        self.df["frequency"] = self.df["orth"].apply(
-            lambda x: self.get_frequency(x)
-        )
-        freq_sum = self.df["frequency"].sum()
-        self.df["frequency"] = self.df["frequency"].apply(
-            lambda x: (x / freq_sum)
-        )
+        # freq_sum = self.df["frequency"].sum()
+        # self.df["frequency"] = self.df["frequency"].apply(
+        #     lambda x: (x / freq_sum)
+        # )
 
         self.dataset = PMSPDataset(self.df)
 
