@@ -21,7 +21,7 @@ def cli():
 @click.command('test', short_help='Just test whether it runs.')
 def just_test():
     stimuli = PMSPStimuli()
-    result = stimuli.generate_stimuli(percentage=0.95)
+    result = stimuli.generate_stimuli_log_transform(percentage=0.95)
     assert(result)
 
     sim = Simulator(model=PMSPNet())

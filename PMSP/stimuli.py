@@ -8,6 +8,7 @@ import torch
 import random
 import re
 import copy
+from math import log
 from torch.utils.data import Dataset, DataLoader
 
 from .device_data_loader import DeviceDataLoader, get_default_device
@@ -75,6 +76,11 @@ class PMSPStimuli:
         #     lambda x: (x / freq_sum)
         # )
 
+        # log transform frequency
+        self.df["frequency"] = self.df["frequency"].apply(
+            lambda x: log(x+2)
+        )
+
         self.dataset = PMSPDataset(self.df)
 
         tmp_loader = DataLoader(
@@ -109,7 +115,7 @@ class PMSPStimuli:
 
         return(result)
 
-    def generate_stimuli_crossvalid(self, percentage=0.5):
+    def generate_stimuli_log_transform(self, percentage=0.5):
         buffer = {
             'training': "",
             'testing': "",
