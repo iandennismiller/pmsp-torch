@@ -1,4 +1,4 @@
-LENS_WORKPATH=~/.lens-storage/quasiregularity/frequency
+LENS_WORKPATH=./var/stimuli
 LENS_EXAMPLES=$(LENS_WORKPATH)/examples
 
 all: test
@@ -9,7 +9,7 @@ test:
 
 run:
 	bin/pmsp.py simulate
-
+ 
 view:
 	bin/pmsp.py generate
 

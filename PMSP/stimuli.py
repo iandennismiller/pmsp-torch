@@ -34,7 +34,8 @@ class PMSPStimuli:
     def __init__(self, filename=None):
         pathname = os.path.dirname(inspect.getfile(self.__class__))
         if not filename:
-            filename = os.path.join(pathname, 'data', filename)
+            filename = os.path.join(pathname, 'data', "plaut_dataset_collapsed.csv")
+            print("loading stimuli from: {}".format(filename))
 
         # load orthography and phonology
         self.mapper = PMSPOrthoPhonoMapping()
