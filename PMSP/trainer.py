@@ -11,18 +11,15 @@ from .device_dataloader import DeviceDataLoader
 
 
 class PMSPTrainer(nn.Module):
-    def __init__(self, learning_rate=0.001):
+    def __init__(self, dataset, learning_rate=0.001):
 
         super(PMSPTrainer, self).__init__()
 
         self.learning_rate = learning_rate
-        self.stimuli = PMSPStimuli(
-            mapping_filename="PMSP/data/plaut_dataset_collapsed.csv",
-            frequency_filename="PMSP/data/word-frequencies.csv",
-            )
-        self.dataset = PMSPDataset(self.stimuli.df)
+        self.dataset = dataset
+
         self.dataloader = DeviceDataLoader(DataLoader(
-            self.dataset,
+            dataset,
             batch_size=len(self.dataset),
             num_workers=0
         ))

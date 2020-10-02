@@ -13,6 +13,7 @@ sys.path.insert(0, '.')
 
 from PMSP.stimuli import PMSPStimuli
 from PMSP.network import PMSPNetwork
+from PMSP.dataset import PMSPDataset
 from PMSP.simulator import Simulator
 
 
@@ -22,11 +23,18 @@ def cli():
 
 @click.command('test', short_help='Just test whether it runs.')
 def just_test():
-    stimuli = PMSPStimuli()
-    result = stimuli.generate_stimuli_log_transform(percentage=0.95)
-    assert(result)
+    stimuli = PMSPStimuli(
+        mapping_filename="PMSP/data/plaut_dataset_collapsed.csv",
+        frequency_filename="PMSP/data/word-frequencies.csv",
+        )
+    dataset = PMSPDataset(stimuli.df)
+    network = PMSPNetwork(dataset=dataset)
 
-    sim = Simulator(model=PMSPNetwork())
+    # stimuli = PMSPStimuli()
+    # result = stimuli.generate_stimuli_log_transform(percentage=0.95)
+    # assert(result)
+
+    sim = Simulator(model=network)
     summary(sim.model, input_size=(1, 1, sim.model.input_size))
     sim.go(num_epochs=3)
 
@@ -43,7 +51,16 @@ def generate(infile, outfile):
 @click.option('--rate', default=0.001, help='Learning rate.')
 @click.option('--epochs', default=300, help='Number of epochs.')
 def simulate(rate, epochs):
-    sim = Simulator(model=PMSPNetwork(learning_rate=rate))
+    mapping_filename = "PMSP/data/plaut_dataset_collapsed.csv"
+    frequency_filename = "PMSP/data/word-frequencies.csv"
+
+    stimuli = PMSPStimuli(
+        mapping_filename=mapping_filename,
+        frequency_filename=frequency_filename
+    )
+    dataset = PMSPDataset(stimuli.df)
+    network = PMSPNetwork(dataset=dataset)
+    sim = Simulator(model=network)
     sim.go(num_epochs=epochs)
 
 cli.add_command(generate)

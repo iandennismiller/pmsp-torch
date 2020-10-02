@@ -9,9 +9,9 @@ from .trainer import PMSPTrainer
 
 class PMSPNetwork(PMSPTrainer):
 
-    def __init__(self, learning_rate=0.001):
+    def __init__(self, dataset, learning_rate=0.001):
 
-        super(PMSPNetwork, self).__init__(learning_rate=learning_rate)
+        super(PMSPNetwork, self).__init__(dataset, learning_rate=learning_rate)
 
         self.input_size = 105
         self.hidden_size = 100
