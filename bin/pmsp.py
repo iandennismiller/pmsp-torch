@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 
 # PMSP Torch
-# CAP Lab
-
-import sys
-sys.path.insert(0, '.')
-from PMSP.stimuli import PMSPStimuli
-from PMSP.model import PMSPNet
-from PMSP.simulator import Simulator
+# Ian Dennis Miller, Brian Lam, Blair Armstrong
 
 import os
 import click
 import logging
 from torchsummary import summary
+
+import sys
+sys.path.insert(0, '.')
+
+from PMSP.stimuli import PMSPStimuli
+from PMSP.network import PMSPNetwork
+from PMSP.simulator import Simulator
+
 
 @click.group()
 def cli():
@@ -24,7 +26,7 @@ def just_test():
     result = stimuli.generate_stimuli_log_transform(percentage=0.95)
     assert(result)
 
-    sim = Simulator(model=PMSPNet())
+    sim = Simulator(model=PMSPNetwork())
     summary(sim.model, input_size=(1, 1, sim.model.input_size))
     sim.go(num_epochs=3)
 
@@ -41,7 +43,7 @@ def generate(infile, outfile):
 @click.option('--rate', default=0.001, help='Learning rate.')
 @click.option('--epochs', default=300, help='Number of epochs.')
 def simulate(rate, epochs):
-    sim = Simulator(model=PMSPNet(learning_rate=rate))
+    sim = Simulator(model=PMSPNetwork(learning_rate=rate))
     sim.go(num_epochs=epochs)
 
 cli.add_command(generate)

@@ -12,7 +12,7 @@ def get_default_device():
         return torch.device('cpu')
 
 class DeviceDataLoader:
-    def __init__(self, dl, device):
+    def __init__(self, dl):
         self.dl = dl
         self.device = get_default_device()
 

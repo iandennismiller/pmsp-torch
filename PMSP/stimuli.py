@@ -1,5 +1,5 @@
 # PMSP Torch
-# CAP Lab
+# Ian Dennis Miller, Brian Lam, Blair Armstrong
 
 import os
 import inspect
@@ -11,35 +11,16 @@ import copy
 from math import log
 from torch.utils.data import Dataset, DataLoader
 
-from .device_data_loader import DeviceDataLoader, get_default_device
-
 # do not warn about assignment to a copy of a pandas object
 pd.options.mode.chained_assignment = None
 
-class PMSPDataset(Dataset):
-    def __init__(self, df):
-        self.df = df
-
-    def __len__(self):
-        return len(self.df)
-    
-    def __getitem__(self, index):
-        return(
-            torch.tensor(self.df.loc[index, "frequency"]),
-            torch.tensor(self.df.loc[index, 'graphemes']),
-            torch.tensor(self.df.loc[index, 'phonemes'])
-        )
-
 class PMSPStimuli:
-    def __init__(self, filename=None):
-        pathname = os.path.dirname(inspect.getfile(self.__class__))
-        if not filename:
-            filename = os.path.join(pathname, 'data', "plaut_dataset_collapsed.csv")
-            print("loading stimuli from: {}".format(filename))
+
+    def __init__(self, mapping_filename, frequency_filename):
 
         # load orthography and phonology
         self.mapper = PMSPOrthoPhonoMapping()
-        self.df = pd.read_csv(filename, sep=",")
+        self.df = pd.read_csv(mapping_filename, sep=",")
 
         # If there is a column called "freq" in the dataset, then use that
         try:
@@ -57,8 +38,7 @@ class PMSPStimuli:
         )
 
         # load word frequencies
-        freq_file = os.path.join(pathname, 'data', 'word-frequencies.csv')
-        df_freq = pd.read_csv(freq_file, header=0)
+        df_freq = pd.read_csv(frequency_filename, header=0)
         self.frequencies = {}
         for index, row in df_freq.iterrows():
             self.frequencies[row['WORD']] = row['KFFRQ']
@@ -80,19 +60,6 @@ class PMSPStimuli:
         # log transform frequency
         self.df["frequency"] = self.df["frequency"].apply(
             lambda x: log(x+2)
-        )
-
-        self.dataset = PMSPDataset(self.df)
-
-        tmp_loader = DataLoader(
-            self.dataset,
-            batch_size=len(self.dataset),
-            num_workers=0
-        )
-
-        self.train_loader = DeviceDataLoader(
-            tmp_loader,
-            get_default_device()
         )
 
     def generate_stimuli(self):

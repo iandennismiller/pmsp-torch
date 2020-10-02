@@ -1,13 +1,12 @@
 # PMSP Torch
-# CAP Lab
-
-from .model import PMSPNet, PMSPDoubleNet
-from .util import make_folder, write_losses
+# Ian Dennis Miller, Brian Lam, Blair Armstrong
 
 import logging
 import torch
-import torch.nn as nn
-import matplotlib.pyplot as plt
+
+from .network import PMSPNetwork
+from .util import make_folder, write_losses
+
 
 class Simulator:
     def __init__(self, model, batch_size=None, num_workers=None, deterministic=True):
