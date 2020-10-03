@@ -19,16 +19,12 @@ class PMSPTrainer:
 
         for step_idx, (frequency, graphemes, phonemes) in enumerate(self.dataloader):
 
-            freq = frequency.float().view(-1, 1)
-            inputs = graphemes.float()
-            targets = phonemes.float()
-            
             # forward pass
-            outputs = self.network(inputs)
+            outputs = self.network(graphemes)
 
             # calculate loss
-            loss = self.criterion(outputs, targets)
-            loss = (loss * freq).mean()
+            loss = self.criterion(outputs, phonemes)
+            loss = (loss * frequency.view(-1, 1)).mean()
             avg_loss += loss.item()
 
             # backprop

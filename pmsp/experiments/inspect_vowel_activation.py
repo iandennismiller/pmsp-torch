@@ -45,6 +45,10 @@ def go():
     trainer = PMSPTrainer(network=network, dataloader=dataloader)
 
     # run for 350 epochs
-    trainer.train(num_epochs=350)
+    trainer.train(num_epochs=300)
 
-    # print(network)
+    step_idx, (frequency, graphemes, phonemes) = enumerate(dataloader).__next__()
+    print(graphemes)
+
+    outputs = network(graphemes)
+    print(outputs)
