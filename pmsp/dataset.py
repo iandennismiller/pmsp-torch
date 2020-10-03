@@ -7,9 +7,9 @@ from torch.utils.data import Dataset
 
 class PMSPDataset(Dataset):
     def __init__(self, df):
-        self.frequency_tensor = torch.tensor(df["frequency"]).float()
-        self.grapheme_tensor = torch.tensor(df["graphemes"]).float()
-        self.phoneme_tensor = torch.tensor(df["phonemes"]).float()
+        self.frequency_tensor = torch.Tensor(df["frequency"]).float()
+        self.grapheme_tensor = torch.Tensor(df["graphemes"]).float()
+        self.phoneme_tensor = torch.Tensor(df["phonemes"]).float()
         self.num_samples = len(df)
 
     def __len__(self):

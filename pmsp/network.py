@@ -4,12 +4,11 @@
 import logging
 import torch
 import torch.nn as nn
+from .util.network_mixin import NetworkMixin
 
 
-class PMSPNetwork(nn.Module):
-
+class PMSPNetwork(nn.Module, NetworkMixin):
     def __init__(self):
-
         super(PMSPNetwork, self).__init__()
 
         self.input_size = 105
@@ -22,15 +21,6 @@ class PMSPNetwork(nn.Module):
         self.init_weights()
         self.init_cuda()
 
-
-    def init_cuda(self):
-        if torch.cuda.is_available():
-            logging.info("using CUDA")
-            self.cuda()
-        else:
-            logging.info("using CPU")
-
-
     def init_weights(self):
         initrange = 0.1
 
@@ -40,15 +30,7 @@ class PMSPNetwork(nn.Module):
         self.layer2.weight.data.uniform_(-initrange, initrange)
         self.layer2.bias.data.uniform_(-1.85, -1.85)
 
-
     def forward(self, x):
         x = torch.sigmoid(self.layer1(x))
         x = torch.sigmoid(self.layer2(x))
         return x
-
-    def save(self, filename):
-        torch.save(self.state_dict(), filename)
-
-    def load(self, filename):
-        self.load_state_dict(torch.load(filename))
-        self.eval()

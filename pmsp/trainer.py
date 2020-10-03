@@ -4,9 +4,8 @@
 import logging
 import torch
 import torch.nn as nn
-import torch.optim as optim
 
-from .util import write_losses, make_folder
+from .util import write_figure, make_folder
 
 
 class PMSPTrainer:
@@ -18,6 +17,7 @@ class PMSPTrainer:
         avg_loss = 0
 
         for step_idx, (frequency, graphemes, phonemes) in enumerate(self.dataloader):
+            assert step_idx is not None
 
             # forward pass
             outputs = self.network(graphemes)
@@ -39,23 +39,29 @@ class PMSPTrainer:
         return(avg_loss)
 
 
-    def train(self, update_interval=10, num_epochs=300, learning_rate=0.001):
+    def train(self, num_epochs, optimizers, update_interval=10):
 
         self.folder = make_folder()
         self.losses = []
 
         self.criterion = nn.BCELoss(reduction='none')
-        self.optimizer = optim.Adam(self.network.parameters(), lr=learning_rate)
 
         for epoch in range(num_epochs):
+            # switch optimizer
+            if epoch in optimizers:
+                self.optimizer = optimizers[epoch]
+                logging.info(f"switch to {self.optimizer}")
+
+            # train one epoch and store the average loss
             avg_loss = self.train_one()
             self.losses.append(avg_loss)
 
-            msg = "[EPOCH {}] loss: {:.10f}".format(epoch+1, avg_loss)
+            msg = "[EPOCH {}] loss: {:.10f}".format(epoch, avg_loss)
             if epoch % update_interval == 0:
                 logging.info(msg)
             else:
                 logging.debug(msg)
 
         # write plot of loss over time
-        write_losses(self.losses, self.folder)
+        # write_losses(self.losses, self.folder)
+        write_figure(dataseries=self.losses, filename=f"{self.folder}/lossplot.png", title="Average Loss over Time", xlabel="epoch", ylabel="average loss")

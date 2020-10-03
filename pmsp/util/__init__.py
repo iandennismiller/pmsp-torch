@@ -5,18 +5,16 @@ import os
 import datetime
 import matplotlib.pyplot as plt
 
-def make_losses_figure(losses):
-    plt.figure()
-    plt.title("Training Curve")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.plot(losses, label="Training Loss")
-    return plt
 
-def write_losses(losses, folder):
-    plt = make_losses_figure(losses)
-    plt.savefig(folder+"/lossplot_final.png", dpi=150)
+def write_figure(dataseries, title, xlabel, ylabel, filename):
+    plt.figure()
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.plot(dataseries, label=title)
+    plt.savefig(filename, dpi=150)
     plt.close()
+
 
 def make_folder():
     # create a new folder for each run
@@ -32,7 +30,7 @@ def make_folder():
     i = 1
     while True:
         try:
-            rootdir = path+"/var/results/"+date+"_test"+'{:02d}'.format(i)
+            rootdir = f'{path}/var/results/{date}_test{i:02d}'
             os.mkdir(rootdir)
             break
         except:
