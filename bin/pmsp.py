@@ -49,7 +49,7 @@ def generate(infile, outfile):
 
 @click.command('simulate', short_help='Run simulation training.')
 @click.option('--rate', default=0.001, help='Learning rate.')
-@click.option('--epochs', default=300, help='Number of epochs.')
+@click.option('--epochs', default=1500, help='Number of epochs.')
 def simulate(rate, epochs):
     mapping_filename = "PMSP/data/plaut_dataset_collapsed.csv"
     frequency_filename = "PMSP/data/word-frequencies.csv"
