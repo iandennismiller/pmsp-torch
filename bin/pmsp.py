@@ -7,15 +7,17 @@ import os
 import click
 import logging
 from torchsummary import summary
+from torch.utils.data import DataLoader
 
 import sys
 sys.path.insert(0, '.')
 
-from PMSP.stimuli import PMSPStimuli
-from PMSP.network import PMSPNetwork
-from PMSP.dataset import PMSPDataset
-from PMSP.simulator import Simulator
-
+from pmsp.stimuli import PMSPStimuli
+from pmsp.dataset import PMSPDataset
+from pmsp.device_dataloader import DeviceDataLoader
+from pmsp.network import PMSPNetwork
+from pmsp.trainer import PMSPTrainer
+from pmsp.simulator import Simulator
 
 @click.group()
 def cli():
@@ -49,7 +51,7 @@ def generate(infile, outfile):
 
 @click.command('simulate', short_help='Run simulation training.')
 @click.option('--rate', default=0.001, help='Learning rate.')
-@click.option('--epochs', default=1500, help='Number of epochs.')
+@click.option('--epochs', default=300, help='Number of epochs.')
 def simulate(rate, epochs):
     mapping_filename = "PMSP/data/plaut_dataset_collapsed.csv"
     frequency_filename = "PMSP/data/word-frequencies.csv"
@@ -59,9 +61,17 @@ def simulate(rate, epochs):
         frequency_filename=frequency_filename
     )
     dataset = PMSPDataset(stimuli.df)
-    network = PMSPNetwork(dataset=dataset)
-    sim = Simulator(model=network)
-    sim.go(num_epochs=epochs)
+    dataloader = DeviceDataLoader(DataLoader(
+        dataset,
+        batch_size=len(dataset),
+        num_workers=0
+    ))
+
+    network = PMSPNetwork()
+    trainer = PMSPTrainer(network=network, dataloader=dataloader)
+
+    sim = Simulator()
+    sim.go(trainer, num_epochs=epochs)
 
 cli.add_command(generate)
 cli.add_command(just_test)

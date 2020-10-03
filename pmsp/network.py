@@ -3,15 +3,13 @@
 
 import torch
 import torch.nn as nn
-import torch.optim as optim
 
-from .trainer import PMSPTrainer
 
-class PMSPNetwork(PMSPTrainer):
+class PMSPNetwork(nn.Module):
 
-    def __init__(self, dataset, learning_rate=0.001):
+    def __init__(self):
 
-        super(PMSPNetwork, self).__init__(dataset, learning_rate=learning_rate)
+        super(PMSPNetwork, self).__init__()
 
         self.input_size = 105
         self.hidden_size = 100
@@ -21,8 +19,6 @@ class PMSPNetwork(PMSPTrainer):
         self.layer2 = nn.Linear(self.hidden_size, self.output_size)
         self.init_weights()
 
-        self.criterion = nn.BCELoss(reduction='none')
-        self.optimizer = optim.Adam(self.parameters(), lr=learning_rate)
 
     def init_weights(self):
         initrange = 0.1
@@ -32,6 +28,7 @@ class PMSPNetwork(PMSPTrainer):
         
         self.layer2.weight.data.uniform_(-initrange, initrange)
         self.layer2.bias.data.uniform_(-1.85, -1.85)
+
 
     def forward(self, x):
         x = torch.sigmoid(self.layer1(x))
