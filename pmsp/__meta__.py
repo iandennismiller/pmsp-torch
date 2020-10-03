@@ -1,5 +1,5 @@
 # PMSP Torch
-# CAP Lab
+# Ian Dennis Miller, Brian Lam, Blair Armstrong
 
 __version__ = '0.1'
 __project__ = 'pmsp-torch'

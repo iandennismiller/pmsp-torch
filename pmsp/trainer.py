@@ -10,18 +10,9 @@ from .util import write_losses, make_folder
 
 
 class PMSPTrainer:
-    def __init__(self, network, dataloader, learning_rate=0.001):
-
+    def __init__(self, network, dataloader):
         self.network = network
         self.dataloader = dataloader
-        self.learning_rate = learning_rate
-
-        if torch.cuda.is_available():
-            logging.info("using CUDA")
-            self.network.cuda()
-        else:
-            logging.info("using CPU")
-
 
     def train_one(self):
         avg_loss = 0
@@ -52,14 +43,13 @@ class PMSPTrainer:
         return(avg_loss)
 
 
-    def train(self, update_interval=10, num_epochs=300):
+    def train(self, update_interval=10, num_epochs=300, learning_rate=0.001):
 
         self.folder = make_folder()
-
         self.losses = []
 
         self.criterion = nn.BCELoss(reduction='none')
-        self.optimizer = optim.Adam(self.network.parameters(), lr=self.learning_rate)
+        self.optimizer = optim.Adam(self.network.parameters(), lr=learning_rate)
 
         for epoch in range(num_epochs):
             avg_loss = self.train_one()

@@ -1,5 +1,5 @@
 # PMSP Torch
-# CAP Lab
+# Ian Dennis Miller, Brian Lam, Blair Armstrong
 
 import os
 import datetime

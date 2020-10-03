@@ -1,20 +1,9 @@
 # PMSP Torch
 # Ian Dennis Miller, Brian Lam, Blair Armstrong
 
-import re
-import os
-import copy
 import torch
-import random
-import inspect
-
-from math import log
-import pandas as pd
-
 from torch.utils.data import Dataset
 
-# do not warn about assignment to a copy of a pandas object
-pd.options.mode.chained_assignment = None
 
 class PMSPDataset(Dataset):
     def __init__(self, df):

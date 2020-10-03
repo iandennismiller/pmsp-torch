@@ -1,6 +1,7 @@
 # PMSP Torch
 # Ian Dennis Miller, Brian Lam, Blair Armstrong
 
+import logging
 import torch
 import torch.nn as nn
 
@@ -17,7 +18,17 @@ class PMSPNetwork(nn.Module):
 
         self.layer1 = nn.Linear(self.input_size, self.hidden_size)
         self.layer2 = nn.Linear(self.hidden_size, self.output_size)
+
         self.init_weights()
+        self.init_cuda()
+
+
+    def init_cuda(self):
+        if torch.cuda.is_available():
+            logging.info("using CUDA")
+            self.cuda()
+        else:
+            logging.info("using CPU")
 
 
     def init_weights(self):

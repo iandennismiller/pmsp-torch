@@ -19,10 +19,12 @@ def cli():
 
 
 @click.command('generate', short_help='Generate data.')
-@click.option('--infile', required=True, help='File to read from.')
+@click.option('--wordfile', required=True, help='Word file to read from.')
+@click.option('--freqfile', required=True, help='Frequency file to read from.')
 @click.option('--outfile', required=True, help='File to write to.')
-def generate(infile, outfile):
-    stimuli = PMSPStimuli(infile)
+def generate(wordfile, freqfile, outfile):
+    from pmsp.stimuli import PMSPStimuli
+    stimuli = PMSPStimuli(wordfile, freqfile)
     result = stimuli.generate_stimuli()
     with open(outfile, 'w') as f:
         f.write(result)
