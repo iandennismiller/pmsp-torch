@@ -6,6 +6,9 @@ all:
 run:
 	time bin/pmsp.py inspect-vowel-activation
  
+retrain:
+	time bin/pmsp.py inspect-vowel-activation --retrain
+
 generate:
 	mkdir -p $(EXAMPLE_PATH)
 

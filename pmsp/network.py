@@ -45,3 +45,10 @@ class PMSPNetwork(nn.Module):
         x = torch.sigmoid(self.layer1(x))
         x = torch.sigmoid(self.layer2(x))
         return x
+
+    def save(self, filename):
+        torch.save(self.state_dict(), filename)
+
+    def load(self, filename):
+        self.load_state_dict(torch.load(filename))
+        self.eval()

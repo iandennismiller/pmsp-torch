@@ -18,7 +18,7 @@ from pmsp.network import PMSPNetwork
 from pmsp.trainer import PMSPTrainer
 
 
-def go():
+def go(retrain):
     torch.manual_seed(1)
 
     # stimuli are drawn from these CSV files
@@ -45,10 +45,16 @@ def go():
     trainer = PMSPTrainer(network=network, dataloader=dataloader)
 
     # run for 350 epochs
-    trainer.train(num_epochs=300)
+    if retrain == True:
+        trainer.train(num_epochs=350)
+        network.save(filename="var/network-default.zip")
+    else:
+        network.load(filename="var/network-default.zip")
 
     step_idx, (frequency, graphemes, phonemes) = enumerate(dataloader).__next__()
     print(graphemes)
 
     outputs = network(graphemes)
+    outputs_max_vowel = outputs[:, 23:37].argmax(dim=1).tolist()
     print(outputs)
+    print(outputs_max_vowel)

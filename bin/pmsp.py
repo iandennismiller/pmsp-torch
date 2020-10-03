@@ -31,9 +31,10 @@ def generate(wordfile, freqfile, outfile):
 
 
 @click.command('inspect-vowel-activation')
-def inspect_vowel_activation():
+@click.option('--retrain/--no-retrain', default=False, help='Whether to retrain the network.')
+def inspect_vowel_activation(retrain):
     from pmsp.experiments.inspect_vowel_activation import go
-    go()
+    go(retrain)
 
 
 cli.add_command(generate)
