@@ -1,4 +1,9 @@
 {
     "python.pythonPath": "~/.virtualenvs/pmsp-torch/bin/python",
-    "restructuredtext.confPath": ""
+    "restructuredtext.confPath": "",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/__pycache__": true
+    }
 }
