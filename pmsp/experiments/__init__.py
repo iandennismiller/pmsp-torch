@@ -1,11 +1,6 @@
 # PMSP Torch
 # Ian Dennis Miller, Brian Lam, Blair Armstrong
 
-import torch
-
-import sys
-sys.path.insert(0, '.')
-
 from pmsp.stimuli import build_dataloader
 from pmsp.network import PMSPNetwork
 

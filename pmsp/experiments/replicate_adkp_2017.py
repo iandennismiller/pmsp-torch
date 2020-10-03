@@ -52,7 +52,8 @@ class ReplicateAdkp2017(StandardModel):
         losses += new_losses
 
         # write plot of loss over time
-        write_figure(dataseries=losses, filename=f"{self.trainer.folder}/lossplot.png", title="Average Loss over Time", xlabel="epoch", ylabel="average loss")
+        folder = make_folder()
+        write_figure(dataseries=losses, filename=f"{folder}/lossplot.png", title="Average Loss over Time", xlabel="epoch", ylabel="average loss")
 
         self.adkp_probes, self.adkp_probes_dataset, self.adkp_probes_dataloader = build_dataloader(
             mapping_filename="pmsp/data/probes.csv",
@@ -66,3 +67,5 @@ class ReplicateAdkp2017(StandardModel):
         outputs_max_vowel = outputs[:, 23:37].argmax(dim=1).tolist()
         print(outputs)
         print(outputs_max_vowel)
+
+        # now calculate accuracy

@@ -3,15 +3,12 @@ EXAMPLE_PATH=./var/stimuli
 all:
 	@echo OK
 
-replicate:
+replicate-adkp-2017:
 	time bin/pmsp.py adkp-2017 --retrain
 
-run:
-	time bin/pmsp.py inspect-vowel-activation
- 
-retrain:
+inspect-vowel-activation:
 	time bin/pmsp.py inspect-vowel-activation --retrain
-
+ 
 generate:
 	mkdir -p $(EXAMPLE_PATH)
 

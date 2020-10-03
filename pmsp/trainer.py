@@ -5,8 +5,6 @@ import logging
 import torch
 import torch.nn as nn
 
-from .util import make_folder
-
 
 class PMSPTrainer:
     def __init__(self, network):
@@ -39,10 +37,7 @@ class PMSPTrainer:
 
 
     def train(self, dataloader, num_epochs, optimizers, update_interval=10):
-
-        self.folder = make_folder()
         self.losses = []
-
         self.criterion = nn.BCELoss(reduction='none')
 
         for epoch in range(num_epochs):

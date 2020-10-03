@@ -38,10 +38,15 @@ class InspectVowelActivation(StandardModel):
             self.network.load(filename="var/network-default.zip")
 
         # write plot of loss over time
-        write_figure(dataseries=losses, filename=f"{self.trainer.folder}/lossplot.png", title="Average Loss over Time", xlabel="epoch", ylabel="average loss")
+        folder = make_folder()
+        write_figure(dataseries=losses, filename=f"{folder}/lossplot.png", title="Average Loss over Time", xlabel="epoch", ylabel="average loss")
 
-        step_idx, (frequency, graphemes, phonemes) = enumerate(self.pmsp_dataloader).__next__()
-        print(graphemes)
+        self.adkp_probes, self.adkp_probes_dataset, self.adkp_probes_dataloader = build_dataloader(
+            mapping_filename="pmsp/data/probes.csv",
+            frequency_filename="pmsp/data/word-frequencies.csv"
+        )
+
+        step_idx, (frequency, graphemes, phonemes) = enumerate(self.adkp_probes_dataloader).__next__()
 
         outputs = self.network(graphemes)
         outputs_max_vowel = outputs[:, 23:37].argmax(dim=1).tolist()
