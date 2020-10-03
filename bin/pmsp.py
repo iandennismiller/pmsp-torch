@@ -39,6 +39,16 @@ def inspect_vowel_activation(retrain):
     experiment.go(retrain)
 
 
+@click.command('adkp-2017')
+@click.option('--retrain/--no-retrain', default=False, help='Whether to retrain the network.')
+def replicate_adkp_2017(retrain):
+    from pmsp.experiments.replicate_adkp_2017 import ReplicateAdkp2017
+
+    experiment = ReplicateAdkp2017()
+    experiment.go(retrain)
+
+
+cli.add_command(replicate_adkp_2017)
 cli.add_command(generate)
 cli.add_command(inspect_vowel_activation)
 

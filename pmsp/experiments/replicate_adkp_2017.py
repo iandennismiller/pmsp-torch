@@ -11,7 +11,7 @@ from ..util import write_figure, make_folder
 from . import StandardModel
 
 
-class InspectVowelActivation(StandardModel):
+class ReplicateAdkp2017(StandardModel):
 
     def go(self, retrain):
         torch.manual_seed(1)
@@ -37,10 +37,29 @@ class InspectVowelActivation(StandardModel):
         else:
             self.network.load(filename="var/network-default.zip")
 
+        # now load up the anchors
+        self.adkp_anchors, self.adkp_anchors_dataset, self.adkp_anchors_dataloader = build_dataloader(
+            mapping_filename="pmsp/data/anchors.csv",
+            frequency_filename="pmsp/data/word-frequencies.csv"
+        )
+
+        # train for another 350 epochs
+        new_losses = self.trainer.train(
+            dataloader=self.adkp_anchors_dataloader,
+            num_epochs=350,
+            optimizers={0: optim.Adam(self.network.parameters(), lr=0.01)}
+        )
+        losses += new_losses
+
         # write plot of loss over time
         write_figure(dataseries=losses, filename=f"{self.trainer.folder}/lossplot.png", title="Average Loss over Time", xlabel="epoch", ylabel="average loss")
 
-        step_idx, (frequency, graphemes, phonemes) = enumerate(self.pmsp_dataloader).__next__()
+        self.adkp_probes, self.adkp_probes_dataset, self.adkp_probes_dataloader = build_dataloader(
+            mapping_filename="pmsp/data/probes.csv",
+            frequency_filename="pmsp/data/word-frequencies.csv"
+        )
+
+        step_idx, (frequency, graphemes, phonemes) = enumerate(self.adkp_probes_dataloader).__next__()
         print(graphemes)
 
         outputs = self.network(graphemes)

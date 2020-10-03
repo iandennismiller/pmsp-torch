@@ -8,6 +8,11 @@ from .english.phonemes import Phonemes
 from .english.graphemes import Graphemes
 from .english.frequencies import Frequencies
 
+from pmsp.dataset import PMSPDataset
+from pmsp.util.device_dataloader import DeviceDataLoader
+from torch.utils.data import DataLoader
+
+
 # do not warn about assignment to a copy of a pandas object
 pd.options.mode.chained_assignment = None
 
@@ -67,3 +72,22 @@ def build_stimuli_df(mapping_filename, frequency_filename):
     )
 
     return df
+
+def build_dataloader(mapping_filename, frequency_filename):
+    # stimuli are drawn from these CSV files
+    stimuli = build_stimuli_df(
+        mapping_filename=mapping_filename,
+        frequency_filename=frequency_filename
+    )
+
+    # build dataset from stimuli
+    dataset = PMSPDataset(stimuli)
+
+    # build dataloader from dataset
+    dataloader = DeviceDataLoader(DataLoader(
+        dataset,
+        batch_size=len(dataset),
+        num_workers=0
+    ))
+
+    return stimuli, dataset, dataloader

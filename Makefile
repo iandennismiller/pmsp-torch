@@ -3,6 +3,9 @@ EXAMPLE_PATH=./var/stimuli
 all:
 	@echo OK
 
+replicate:
+	time bin/pmsp.py adkp-2017 --retrain
+
 run:
 	time bin/pmsp.py inspect-vowel-activation
  
