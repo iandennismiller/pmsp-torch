@@ -18,7 +18,7 @@ from pmsp.util import write_figure, make_folder, get_pmsp_path
 def main(train=False):
     pmsp_path = get_pmsp_path()
 
-    pmsp_stimuli, pmsp_dataset, pmsp_dataloader = build_dataloader(
+    pmsp_dataloader = build_dataloader(
         mapping_filename=f"{pmsp_path}/data/plaut_dataset_collapsed.csv",
         frequency_filename=f"{pmsp_path}/data/word-frequencies.csv"
     )

@@ -50,3 +50,6 @@ class Phonemes:
                 codas[self.phonemes['coda'].index(phon[k:k+2])] = 1
 
         return onset + vowel + codas
+
+    def one_hot_to_phoneme(self, bank_str, index):
+        return self.phonemes[bank_str][index]

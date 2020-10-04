@@ -4,16 +4,17 @@ all:
 	@echo OK
 
 pmsp-1996:
-	time src/scripts/pmsp.py pmsp-1996 --retrain
+	time src/scripts/pmsp.py pmsp-1996 --train
 
 adkp-2017:
-	time src/scripts/pmsp.py adkp-2017 --retrain
+	time src/scripts/pmsp.py adkp-2017 --train
 
 mdlpa-2020:
-	time src/scripts/pmsp.py mdlpa-2020 --retrain
+	time src/scripts/pmsp.py mdlpa-2020 --train
 
 vowels-for-word-learning:
-	time src/scripts/pmsp.py vowels-for-word-learning --retrain
+	@echo to train, make pmsp-1996 first or invoke with --train
+	time src/scripts/pmsp.py vowels-for-word-learning --no-train
  
 lens-stimuli:
 	mkdir -p $(EXAMPLE_PATH)

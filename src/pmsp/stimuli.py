@@ -76,13 +76,13 @@ def build_stimuli_df(mapping_filename, frequency_filename):
 
 def build_dataloader(mapping_filename, frequency_filename):
     # stimuli are drawn from these CSV files
-    stimuli = build_stimuli_df(
+    stimuli_df = build_stimuli_df(
         mapping_filename=mapping_filename,
         frequency_filename=frequency_filename
     )
 
-    # build dataset from stimuli
-    dataset = PMSPDataset(stimuli)
+    # build dataset from stimuli dataframe
+    dataset = PMSPDataset(stimuli_df)
 
     # build dataloader from dataset
     dataloader = DeviceDataLoader(DataLoader(
@@ -91,4 +91,22 @@ def build_dataloader(mapping_filename, frequency_filename):
         num_workers=0
     ))
 
-    return stimuli, dataset, dataloader
+    return dataloader
+
+
+def append_dataloader(dataloader1, dataloader2):
+    dataset1_df = dataloader1.dl.dataset.df
+    dataset2_df = dataloader2.dl.dataset.df
+
+    stimuli_df = pd.concat([dataset1_df, dataset2_df], ignore_index=True, sort=False)
+
+    dataset = PMSPDataset(stimuli_df)
+
+    # build dataloader from dataset
+    dataloader = DeviceDataLoader(DataLoader(
+        dataset,
+        batch_size=len(dataset),
+        num_workers=0
+    ))
+
+    return dataloader
