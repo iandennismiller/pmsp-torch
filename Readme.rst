@@ -51,7 +51,8 @@ Example Notebooks
 
 Jupyter:
 
-https://projects.sisrlab.com/cap-lab/pmsp-torch/-/blob/master/pmsp-1996-example.ipynb
+- [pmsp-1996-example.ipynb](https://projects.sisrlab.com/cap-lab/pmsp-torch/-/blob/master/notebooks/pmsp-1996-example.ipynb)
+- [vowels-for-word-learning.ipynb](https://projects.sisrlab.com/cap-lab/pmsp-torch/-/blob/master/notebooks/vowels-for-word-learning.ipynb)
 
 Google Colab:
 

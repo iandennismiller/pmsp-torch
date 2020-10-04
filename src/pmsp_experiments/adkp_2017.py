@@ -52,9 +52,9 @@ def train_base_vocabulary(do_training, trainer):
             num_epochs=350,
             optimizers=optimizers
         )
-        trainer.network.save(filename="var/pmsp-base-vocabulary.zip")
+        trainer.network.save(filename="/tmp/pmsp-base-vocabulary.zip")
     else:
-        trainer.network.load(filename="var/pmsp-base-vocabulary.zip")
+        trainer.network.load(filename="/tmp/pmsp-base-vocabulary.zip")
 
 
 def train_anchors(do_training, trainer):
@@ -67,9 +67,9 @@ def train_anchors(do_training, trainer):
             num_epochs=350,
             optimizers={0: optim.Adam(trainer.network.parameters(), lr=0.01)}
         )
-        trainer.network.save(filename="var/adkp-with-anchors.zip")
+        trainer.network.save(filename="/tmp/adkp-with-anchors.zip")
     else:
-        trainer.network.load(filename="var/adkp-with-anchors.zip")
+        trainer.network.load(filename="/tmp/adkp-with-anchors.zip")
 
 
 def test_probes(network):

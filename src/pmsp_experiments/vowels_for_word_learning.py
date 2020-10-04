@@ -46,9 +46,9 @@ def train_base_vocabulary(do_training, trainer):
             num_epochs=350,
             optimizers=optimizers
         )
-        trainer.network.save(filename="var/pmsp-base-vocabulary.zip")
+        trainer.network.save(filename="/tmp/pmsp-base-vocabulary.zip")
     else:
-        trainer.network.load(filename="var/pmsp-base-vocabulary.zip")
+        trainer.network.load(filename="/tmp/pmsp-base-vocabulary.zip")
 
 
 def test_behavioural_stimuli(network):
@@ -58,7 +58,7 @@ def test_behavioural_stimuli(network):
     outputs_max_vowel = outputs[:, 23:37].argmax(dim=1).tolist()
     outputs_phonemes = [english_phonemes.one_hot_to_phoneme('vowel', x) for x in outputs_max_vowel]
 
-    print(dict(zip(behavioural_stimuli_dataloader.dl.dataset.df["orth"], outputs_phonemes)))
+    return dict(zip(behavioural_stimuli_dataloader.dl.dataset.df["orth"], outputs_phonemes))
 
 
 def main(train=False):
@@ -74,7 +74,8 @@ def main(train=False):
 
     ###
     # Test with behavioural stimuli
-    test_behavioural_stimuli(trainer.network)
+    vowels = test_behavioural_stimuli(trainer.network)
+    print(vowels)
 
 
 if __name__ == "__main__":
