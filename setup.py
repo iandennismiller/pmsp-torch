@@ -37,7 +37,10 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Topic :: Office/Business",
     ],
-    packages=find_packages(),
+    packages=[
+        "pmsp",
+        "pmsp_experiments",
+    ],
     include_package_data=True,
     keywords='',
     author=grep('__author__'),

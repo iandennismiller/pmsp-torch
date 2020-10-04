@@ -4,14 +4,11 @@
 # Ian Dennis Miller, Brian Lam, Blair Armstrong
 
 import os
+import sys
 import click
 import logging
-from torchsummary import summary
-from torch.utils.data import DataLoader
 
-import sys
 sys.path.insert(0, '.')
-
 
 @click.group()
 def cli():
@@ -32,24 +29,28 @@ def generate(wordfile, freqfile, outfile):
 
 
 @click.command('inspect-vowel-activation')
-@click.option('--retrain/--no-retrain', default=False, help='Whether to retrain the network.')
+@click.option('--retrain/--no-retrain', default=False)
 def inspect_vowel_activation(retrain):
-    from pmsp.experiments.inspect_vowel_activation import InspectVowelActivation
-
-    experiment = InspectVowelActivation()
-    experiment.go(retrain)
+    from pmsp_experiments.inspect_vowel_activation import main
+    main(retrain)
 
 
 @click.command('adkp-2017')
-@click.option('--retrain/--no-retrain', default=False, help='Whether to retrain the network.')
+@click.option('--retrain/--no-retrain', default=False)
 def replicate_adkp_2017(retrain):
-    from pmsp.experiments.replicate_adkp_2017 import ReplicateAdkp2017
+    from pmsp_experiments.replicate_adkp_2017 import main
+    main(retrain)
 
-    experiment = ReplicateAdkp2017()
-    experiment.go(retrain)
+
+@click.command('pmsp-1996')
+@click.option('--retrain/--no-retrain', default=False)
+def replicate_pmsp_1996(retrain):
+    from pmsp_experiments.replicate_pmsp_1996 import main
+    main(retrain)
 
 
 cli.add_command(replicate_adkp_2017)
+cli.add_command(replicate_pmsp_1996)
 cli.add_command(generate)
 cli.add_command(inspect_vowel_activation)
 

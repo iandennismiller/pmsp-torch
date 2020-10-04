@@ -6,6 +6,9 @@ all:
 replicate-adkp-2017:
 	time bin/pmsp.py adkp-2017 --retrain
 
+replicate-pmsp-1996:
+	time bin/pmsp.py pmsp-1996 --retrain
+
 inspect-vowel-activation:
 	time bin/pmsp.py inspect-vowel-activation --retrain
  
