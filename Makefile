@@ -3,39 +3,42 @@ EXAMPLE_PATH=./var/stimuli
 all:
 	@echo OK
 
-replicate-adkp-2017:
-	time bin/pmsp.py adkp-2017 --retrain
-
-replicate-pmsp-1996:
+pmsp-1996:
 	time bin/pmsp.py pmsp-1996 --retrain
 
-inspect-vowel-activation:
-	time bin/pmsp.py inspect-vowel-activation --retrain
+adkp-2017:
+	time bin/pmsp.py adkp-2017 --retrain
+
+mdlpa-2020:
+	time bin/pmsp.py mdlpa-2020 --retrain
+
+vowels-for-word-learning:
+	time bin/pmsp.py vowels-for-word-learning --retrain
  
 lens-stimuli:
 	mkdir -p $(EXAMPLE_PATH)
 
-	bin/pmsp.py generate \
+	bin/pmsp.py lens-stimuli \
 		--wordfile pmsp/data/plaut_dataset_collapsed.csv \
 		--freqfile pmsp/data/word-frequencies.csv \
 		--outfile $(EXAMPLE_PATH)/pmsp-train.ex
 
-	bin/pmsp.py generate \
+	bin/pmsp.py lens-stimuli \
 		--wordfile pmsp/data/anchors_new1.csv \
 		--freqfile pmsp/data/word-frequencies.csv \
 		--outfile $(EXAMPLE_PATH)/anchors-n1.ex
 
-	bin/pmsp.py generate \
+	bin/pmsp.py lens-stimuli \
 		--wordfile pmsp/data/anchors_new2.csv \
 		--freqfile pmsp/data/word-frequencies.csv \
 		--outfile $(EXAMPLE_PATH)/anchors-n2.ex
 
-	bin/pmsp.py generate \
+	bin/pmsp.py lens-stimuli \
 		--wordfile pmsp/data/anchors_new3.csv \
 		--freqfile pmsp/data/word-frequencies.csv \
 		--outfile $(EXAMPLE_PATH)/anchors-n3.ex
 
-	bin/pmsp.py generate \
+	bin/pmsp.py lens-stimuli \
 		--wordfile pmsp/data/probes_new.csv \
 		--freqfile pmsp/data/word-frequencies.csv \
 		--outfile $(EXAMPLE_PATH)/probes-new.ex
@@ -59,4 +62,7 @@ clean:
 install:
 	python ./setup.py install
 
-.PHONY: all requirements clean lens-stimuli run clean install
+notebook:
+	jupyter notebook
+
+.PHONY: all requirements clean lens-stimuli run clean install notebook

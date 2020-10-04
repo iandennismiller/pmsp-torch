@@ -19,7 +19,7 @@ def cli():
 @click.option('--wordfile', required=True, help='Word file to read from.')
 @click.option('--freqfile', required=True, help='Frequency file to read from.')
 @click.option('--outfile', required=True, help='File to write to.')
-def generate(wordfile, freqfile, outfile):
+def lens_stimuli(wordfile, freqfile, outfile):
     from pmsp.stimuli import build_stimuli_df
     from pmsp.util.lens_stimuli import generate_stimuli
     stimuli_df = build_stimuli_df(wordfile, freqfile)
@@ -28,31 +28,40 @@ def generate(wordfile, freqfile, outfile):
         f.write(result)
 
 
-@click.command('inspect-vowel-activation')
+@click.command('vowels-for-word-learning')
 @click.option('--retrain/--no-retrain', default=False)
-def inspect_vowel_activation(retrain):
-    from pmsp_experiments.inspect_vowel_activation import main
+def vowels_for_word_learning(retrain):
+    from pmsp_experiments.vowels_for_word_learning import main
     main(retrain)
 
 
 @click.command('adkp-2017')
 @click.option('--retrain/--no-retrain', default=False)
-def replicate_adkp_2017(retrain):
-    from pmsp_experiments.replicate_adkp_2017 import main
+def adkp_2017(retrain):
+    from pmsp_experiments.adkp_2017 import main
     main(retrain)
 
 
 @click.command('pmsp-1996')
 @click.option('--retrain/--no-retrain', default=False)
-def replicate_pmsp_1996(retrain):
-    from pmsp_experiments.replicate_pmsp_1996 import main
+def pmsp_1996(retrain):
+    from pmsp_experiments.pmsp_1996 import main
     main(retrain)
 
 
-cli.add_command(replicate_adkp_2017)
-cli.add_command(replicate_pmsp_1996)
-cli.add_command(generate)
-cli.add_command(inspect_vowel_activation)
+@click.command('mdlpa-2020')
+@click.option('--retrain/--no-retrain', default=False)
+def mdlpa_2020(retrain):
+    from pmsp_experiments.mdlpa_2020 import main
+    main(retrain)
+
+
+cli.add_command(lens_stimuli)
+cli.add_command(pmsp_1996)
+cli.add_command(adkp_2017)
+cli.add_command(mdlpa_2020)
+cli.add_command(vowels_for_word_learning)
+
 
 if __name__ == '__main__':
     if not os.path.isdir('var'):
