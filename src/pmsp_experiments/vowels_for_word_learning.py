@@ -45,7 +45,13 @@ def main(retrain=False):
 
     # write plot of loss over time
     folder = make_folder()
-    write_figure(dataseries=losses, filename=f"{folder}/lossplot.png", title="Average Loss over Time", xlabel="epoch", ylabel="average loss")
+    write_figure(
+        dataseries=losses,
+        filename=f"{folder}/lossplot.png",
+        title="Average Loss over Time",
+        xlabel="epoch",
+        ylabel="average loss"
+    )
 
     adkp_probes, adkp_probes_dataset, adkp_probes_dataloader = build_dataloader(
         mapping_filename="pmsp/data/probes.csv",
