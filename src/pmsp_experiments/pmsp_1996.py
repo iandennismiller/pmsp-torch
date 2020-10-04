@@ -3,22 +3,24 @@
 # PMSP Torch
 # Ian Dennis Miller, Brian Lam, Blair Armstrong
 
-import sys
+import os
 import logging
 
 import torch
 import torch.optim as optim
 
-from pmsp.stimuli import build_stimuli_df, build_dataloader
 from pmsp.network import PMSPNetwork
 from pmsp.trainer import PMSPTrainer
-from pmsp.util import write_figure, make_folder
+from pmsp.stimuli import build_stimuli_df, build_dataloader
+from pmsp.util import write_figure, make_folder, get_pmsp_path
 
 
-def main(retrain=False):
+def main(train=False):
+    pmsp_path = get_pmsp_path()
+
     pmsp_stimuli, pmsp_dataset, pmsp_dataloader = build_dataloader(
-        mapping_filename="pmsp/data/plaut_dataset_collapsed.csv",
-        frequency_filename="pmsp/data/word-frequencies.csv"
+        mapping_filename=f"{pmsp_path}/data/plaut_dataset_collapsed.csv",
+        frequency_filename=f"{pmsp_path}/data/word-frequencies.csv"
     )
 
     torch.manual_seed(1)

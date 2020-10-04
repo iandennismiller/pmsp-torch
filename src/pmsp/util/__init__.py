@@ -2,23 +2,29 @@
 # Ian Dennis Miller, Brian Lam, Blair Armstrong
 
 import os
+import inspect
 import datetime
 import matplotlib.pyplot as plt
 
+
+def get_pmsp_path():
+    from ..network import PMSPNetwork
+    src_file = inspect.getsourcefile(PMSPNetwork)
+    pmsp_path = os.path.dirname(os.path.realpath(src_file))
+    return pmsp_path
 
 
 class StandardModel:
 
     def __init__(self):
-        # set up the network
         from ..stimuli import build_dataloader
         from ..network import PMSPNetwork
 
         self.network = PMSPNetwork()
-
+        self.pmsp_path = get_pmsp_path()
         self.pmsp_stimuli, self.pmsp_dataset, self.pmsp_dataloader = build_dataloader(
-            mapping_filename="pmsp/data/plaut_dataset_collapsed.csv",
-            frequency_filename="pmsp/data/word-frequencies.csv"
+            mapping_filename=f"{self.pmsp_path}/data/plaut_dataset_collapsed.csv",
+            frequency_filename=f"{self.pmsp_path}/data/word-frequencies.csv"
         )
 
 

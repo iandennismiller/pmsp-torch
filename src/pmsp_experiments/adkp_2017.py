@@ -4,6 +4,7 @@
 # Ian Dennis Miller, Brian Lam, Blair Armstrong
 
 import logging
+
 import torch
 import torch.optim as optim
 from torchsummary import summary
@@ -11,10 +12,12 @@ from torchsummary import summary
 from pmsp.stimuli import build_stimuli_df, build_dataloader
 from pmsp.trainer import PMSPTrainer
 from pmsp.network import PMSPNetwork
-from pmsp.util import write_figure, make_folder
+from pmsp.util import write_figure, make_folder, get_pmsp_path
 
 
-def main(retrain=False):
+def main(train=False):
+    pmsp_path = get_pmsp_path()
+
     torch.manual_seed(1)
 
     network = PMSPNetwork()
@@ -26,14 +29,14 @@ def main(retrain=False):
     }
 
     pmsp_stimuli, pmsp_dataset, pmsp_dataloader = build_dataloader(
-        mapping_filename="pmsp/data/plaut_dataset_collapsed.csv",
-        frequency_filename="pmsp/data/word-frequencies.csv"
+        mapping_filename=f"{pmsp_path}/data/plaut_dataset_collapsed.csv",
+        frequency_filename=f"{pmsp_path}/data/word-frequencies.csv"
     )
 
     losses = []
 
     # run for 350 epochs
-    if retrain == True:
+    if train == True:
         losses = trainer.train(
             dataloader=pmsp_dataloader,
             num_epochs=350,
@@ -45,8 +48,8 @@ def main(retrain=False):
 
     # now load up the anchors
     adkp_anchors, adkp_anchors_dataset, adkp_anchors_dataloader = build_dataloader(
-        mapping_filename="pmsp/data/anchors.csv",
-        frequency_filename="pmsp/data/word-frequencies.csv"
+        mapping_filename=f"{pmsp_path}/data/anchors.csv",
+        frequency_filename=f"{pmsp_path}/data/word-frequencies.csv"
     )
 
     # train for another 350 epochs
@@ -68,8 +71,8 @@ def main(retrain=False):
     )
 
     adkp_probes, adkp_probes_dataset, adkp_probes_dataloader = build_dataloader(
-        mapping_filename="pmsp/data/probes.csv",
-        frequency_filename="pmsp/data/word-frequencies.csv"
+        mapping_filename=f"{pmsp_path}/data/probes.csv",
+        frequency_filename=f"{pmsp_path}/data/word-frequencies.csv"
     )
 
     step_idx, (frequency, graphemes, phonemes) = enumerate(adkp_probes_dataloader).__next__()

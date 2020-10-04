@@ -29,31 +29,31 @@ def lens_stimuli(wordfile, freqfile, outfile):
 
 
 @click.command('vowels-for-word-learning', short_help='How does the model regularize vowels?')
-@click.option('--retrain/--no-retrain', default=False)
-def vowels_for_word_learning(retrain):
+@click.option('--train/--no-train', default=False)
+def vowels_for_word_learning(train):
     from pmsp_experiments.vowels_for_word_learning import main
-    main(retrain)
+    main(train)
 
 
 @click.command('adkp-2017', short_help='Armstrong, Dumay, Kim, Pitt. (2017)')
-@click.option('--retrain/--no-retrain', default=False)
-def adkp_2017(retrain):
+@click.option('--train/--no-train', default=False)
+def adkp_2017(train):
     from pmsp_experiments.adkp_2017 import main
-    main(retrain)
+    main(train)
 
 
 @click.command('pmsp-1996', short_help='Plaut, McClelland, Seidenberg, Patterson. (1996)')
-@click.option('--retrain/--no-retrain', default=False)
-def pmsp_1996(retrain):
+@click.option('--train/--no-train', default=False)
+def pmsp_1996(train):
     from pmsp_experiments.pmsp_1996 import main
-    main(retrain)
+    main(train)
 
 
 @click.command('mdlpa-2020', short_help='Miller, Dumay, Lam, Pitt, Armstrong. (2020)')
-@click.option('--retrain/--no-retrain', default=False)
-def mdlpa_2020(retrain):
+@click.option('--train/--no-train', default=False)
+def mdlpa_2020(train):
     from pmsp_experiments.mdlpa_2020 import main
-    main(retrain)
+    main(train)
 
 
 cli.add_command(lens_stimuli)
