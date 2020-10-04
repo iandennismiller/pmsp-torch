@@ -9,7 +9,7 @@ replicate-adkp-2017:
 inspect-vowel-activation:
 	time bin/pmsp.py inspect-vowel-activation --retrain
  
-generate:
+lens-stimuli:
 	mkdir -p $(EXAMPLE_PATH)
 
 	bin/pmsp.py generate \
@@ -50,10 +50,10 @@ requirements:
 	pip install -r requirements.txt
 
 clean:
-	rm -rf build dist pmsp_torch.egg-info var/stimuli var/results
-	-rmdir var
+	rm -rf build dist pmsp_torch.egg-info
+	# rm -rf var/stimuli var/results
 
 install:
 	python ./setup.py install
 
-.PHONY: all requirements clean generate run clean install
+.PHONY: all requirements clean lens-stimuli run clean install

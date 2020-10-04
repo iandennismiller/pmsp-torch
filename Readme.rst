@@ -8,37 +8,27 @@ Installation
 
     git clone https://projects.sisrlab.com/cap-lab/pmsp-torch
     make requirements
-    make test
 
-Or install straight from git
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Or install straight from git using pip
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
     pip install git+https://projects.sisrlab.com/cap-lab/pmsp-torch@master
-    pmsp.py test
-    pmsp.py simulate
 
 Running simulation
 ------------------
 
 ::
 
-    make run
+    make replicate-adkp-2017
 
-Viewing stimuli
----------------
-
-::
-
-    make view
-
-Writing stimuli to a file
--------------------------
+Build LENS stimuli
+------------------
 
 ::
 
-    make write
+    make lens-stimuli
 
 Code Example
 ------------
