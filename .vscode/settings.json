@@ -4,6 +4,10 @@
     "files.exclude": {
         "**/.git": true,
         "**/.DS_Store": true,
-        "**/__pycache__": true
+        "**/__pycache__/": true,
+        "**/.ipynb_checkpoints": true,
+        "**/dist/": true,
+        "**/build/": true,
+        "**/*.egg-info/": true,
     }
 }

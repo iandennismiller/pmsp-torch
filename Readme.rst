@@ -18,22 +18,28 @@ An alternative is to use pip, which will install requirements and put the `pmsp.
 
     pip install git+https://projects.sisrlab.com/cap-lab/pmsp-torch@master
 
+Usage
+-----
+
+List available commands
+
+::
+
+    pmsp.py --help
+
 Running simulations
 -------------------
 
 `pmsp-torch` can be used to replicate several studies based on PMSP 1996.
 
-::
-
-    make pmsp-1996
-
-The experiment can be launched with `bin/pmsp.py`, which takes command line arguments and handles logging.
+Experiment can be launched with `bin/pmsp.py`, which takes command line arguments and handles logging.
 
 ::
 
-    bin/pmsp.py pmsp-1996 --no-retrain
+    pmsp.py pmsp-1996 --help
+    pmsp.py pmsp-1996 --no-retrain
 
-The experiment can also be launched directly, albeit without arguments:
+Experiments can also be launched directly:
 
 ::
 
