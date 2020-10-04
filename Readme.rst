@@ -21,22 +21,31 @@ Running simulation
 
 ::
 
+    make replicate-pmsp-1996
     make replicate-adkp-2017
 
-Build LENS stimuli
-------------------
-
-::
-
-    make lens-stimuli
-
-Code Example
-------------
+Example
+-------
 
 This works in Jupyter or Google Colab:
 
 - https://colab.research.google.com
-- https://colab.research.google.com/drive/1U9htm2E6Eqsz-RLUjy8mXVhkgr_t-Lqv#scrollTo=kzxx8srNa4mW
+- https://colab.research.google.com/drive/1U9htm2E6Eqsz-RLUjy8mXVhkgr_t-Lqv
+
+Configure colab
+^^^^^^^^^^^^^^^
+
+::
+
+    !pip3 -q install --upgrade git+https://projects.sisrlab.com/cap-lab/pmsp-torch@master
+    !git clone https://projects.sisrlab.com/cap-lab/pmsp-torch.git
+    
+    # # Optionally, mount from google drive to persist logs and images
+    # from google.colab import drive
+    # drive.mount('/content/drive')
+
+Run a sample network
+^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -44,12 +53,13 @@ This works in Jupyter or Google Colab:
     import torch
     import torch.optim as optim
 
-    from pmsp.stimuli import build_stimuli_df, build_dataloader
+    from pmsp.stimuli import build_dataloader
     from pmsp.network import PMSPNetwork
     from pmsp.trainer import PMSPTrainer
-    from pmsp.util import write_figure, make_folder
+    from pmsp.util import plot_figure
 
     logging.basicConfig(
+        # filename='/content/drive/My Drive/Colab Notebooks/pmsp.log',
         level=logging.INFO
     )
 
@@ -72,6 +82,13 @@ This works in Jupyter or Google Colab:
         dataloader=pmsp_dataloader,
         num_epochs=350,
         optimizers=optimizers
+    )
+
+    plot_figure(
+        dataseries=losses,
+        title="Average Loss over Time",
+        xlabel="epoch",
+        ylabel="average loss"
     )
 
 Windows Torch Installation
