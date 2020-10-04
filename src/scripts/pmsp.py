@@ -8,7 +8,7 @@ import sys
 import click
 import logging
 
-sys.path.insert(0, '.')
+sys.path.insert(0, './src')
 
 @click.group()
 def cli():

@@ -1,8 +1,8 @@
 *.pyc
-/pmsp_torch.egg-info
-/build
-/dist
+pmsp_torch.egg-info/
+build/
+dist/
 /var
 __pycache__/
 .DS_Store
-/.ipynb_checkpoints/
+.ipynb_checkpoints/

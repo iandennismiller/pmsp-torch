@@ -37,13 +37,12 @@ Experiment can be launched with `bin/pmsp.py`, which takes command line argument
 ::
 
     pmsp.py pmsp-1996 --help
-    pmsp.py pmsp-1996 --no-retrain
 
 Experiments can also be launched directly:
 
 ::
 
-    pmsp_experiments/pmsp_1996.py
+    src/pmsp_experiments/pmsp_1996.py
 
 Example Notebooks
 -----------------

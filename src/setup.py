@@ -20,9 +20,9 @@ setup(
     name='pmsp-torch',
     description="PMSP implemented with Torch",
     scripts=[
-        "bin/pmsp.py",
+        "scripts/pmsp.py",
     ],
-    long_description=read('Readme.rst'),
+    long_description=read('../Readme.rst'),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
