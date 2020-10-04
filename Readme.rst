@@ -26,11 +26,23 @@ Running simulations
 ::
 
     make pmsp-1996
-    make adkp-2017
-    make mdlpa-2020
 
-Examples
---------
+The experiment can be launched with `bin/pmsp.py`, which takes command line arguments and handles logging.
+
+::
+
+    bin/pmsp.py pmsp-1996 --no-retrain
+
+The experiment can also be launched directly, albeit without arguments:
+
+::
+
+    pmsp_experiments/pmsp_1996.py
+
+Example Notebooks
+-----------------
+
+`pmsp-torch` runs inside Jupyter notebooks.
 
 Jupyter:
 

@@ -15,7 +15,7 @@ def cli():
     pass
 
 
-@click.command('generate', short_help='Generate data.')
+@click.command('lens-stimuli', short_help='Generate data.')
 @click.option('--wordfile', required=True, help='Word file to read from.')
 @click.option('--freqfile', required=True, help='Frequency file to read from.')
 @click.option('--outfile', required=True, help='File to write to.')

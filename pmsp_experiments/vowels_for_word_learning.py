@@ -3,6 +3,7 @@
 # PMSP Torch
 # Ian Dennis Miller, Brian Lam, Blair Armstrong
 
+import logging
 import torch
 import torch.optim as optim
 from torchsummary import summary
@@ -58,5 +59,9 @@ def main(retrain=False):
     print(outputs)
     print(outputs_max_vowel)
 
+
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO
+    )
     main()

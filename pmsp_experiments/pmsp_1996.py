@@ -40,5 +40,9 @@ def main(retrain=False):
     folder = make_folder()
     write_figure(dataseries=losses, filename=f"{folder}/lossplot.png", title="Average Loss over Time", xlabel="epoch", ylabel="average loss")
 
+
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO
+    )
     main()
