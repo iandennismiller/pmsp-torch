@@ -6,12 +6,17 @@ import datetime
 import matplotlib.pyplot as plt
 
 
-def write_figure(dataseries, title, xlabel, ylabel, filename):
+def plot_figure(dataseries, title, xlabel, ylabel):
     plt.figure()
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.plot(dataseries, label=title)
+    return plt
+
+
+def write_figure(dataseries, title, xlabel, ylabel, filename):
+    plot_figure(dataseries, title, xlabel, ylabel)
     plt.savefig(filename, dpi=150)
     plt.close()
 
