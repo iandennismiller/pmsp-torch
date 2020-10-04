@@ -16,7 +16,7 @@ An alternative is to use pip, which will install requirements and put the `pmsp.
 
 ::
 
-    pip install git+https://projects.sisrlab.com/cap-lab/pmsp-torch@master
+    pip install 'git+https://projects.sisrlab.com/cap-lab/pmsp-torch#subdirectory=src'
 
 Usage
 -----
