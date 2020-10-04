@@ -23,9 +23,10 @@ def cli():
 @click.option('--freqfile', required=True, help='Frequency file to read from.')
 @click.option('--outfile', required=True, help='File to write to.')
 def generate(wordfile, freqfile, outfile):
-    from pmsp.stimuli import PMSPStimuli
-    stimuli = PMSPStimuli(wordfile, freqfile)
-    result = stimuli.generate_stimuli()
+    from pmsp.stimuli import build_stimuli_df
+    from pmsp.util.lens_stimuli import generate_stimuli
+    stimuli_df = build_stimuli_df(wordfile, freqfile)
+    result = generate_stimuli(stimuli_df)
     with open(outfile, 'w') as f:
         f.write(result)
 

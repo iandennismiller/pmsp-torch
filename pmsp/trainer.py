@@ -9,6 +9,7 @@ import torch.nn as nn
 class PMSPTrainer:
     def __init__(self, network):
         self.network = network
+        self.epoch = 0
 
     def train_one(self, dataloader):
         avg_loss = 0
@@ -40,20 +41,22 @@ class PMSPTrainer:
         self.losses = []
         self.criterion = nn.BCELoss(reduction='none')
 
-        for epoch in range(num_epochs):
+        for epoch_iterator in range(num_epochs):
             # switch optimizer
-            if epoch in optimizers:
-                self.optimizer = optimizers[epoch]
+            if self.epoch in optimizers:
+                self.optimizer = optimizers[self.epoch]
                 logging.info(f"switch to {self.optimizer}")
 
             # train one epoch and store the average loss
             avg_loss = self.train_one(dataloader)
             self.losses.append(avg_loss)
 
-            msg = "[EPOCH {}] loss: {:.10f}".format(epoch, avg_loss)
-            if epoch % update_interval == 0:
+            msg = "[EPOCH {}] loss: {:.10f}".format(self.epoch, avg_loss)
+            if epoch_iterator % update_interval == 0:
                 logging.info(msg)
             else:
                 logging.debug(msg)
+
+            self.epoch += 1
 
         return self.losses
