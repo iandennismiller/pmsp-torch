@@ -1,6 +1,7 @@
 # PMSP Torch
 # Ian Dennis Miller, Brian Lam, Blair Armstrong
 
+import numpy as np
 import pandas as pd
 
 # do not warn about assignment to a copy of a pandas object
@@ -53,3 +54,14 @@ class Phonemes:
 
     def one_hot_to_phoneme(self, bank_str, index):
         return self.phonemes[bank_str][index]
+
+    def expand_one_hot(self, vector):
+        np_vector = np.array(vector)
+
+        onset_idx = np_vector[:22].argmax()
+        vowel_idx = np_vector[23:37].argmax()
+        offset_idx = np_vector[38:].argmax()
+
+        return self.one_hot_to_phoneme('onset', onset_idx) + \
+            self.one_hot_to_phoneme('vowel', vowel_idx) + \
+            self.one_hot_to_phoneme('coda', offset_idx)

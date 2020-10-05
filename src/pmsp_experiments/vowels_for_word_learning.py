@@ -8,6 +8,8 @@ import torch
 import torch.optim as optim
 from torchsummary import summary
 
+import pandas as pd
+
 from pmsp.stimuli import build_stimuli_df, build_dataloader
 from pmsp.trainer import PMSPTrainer
 from pmsp.network import PMSPNetwork
@@ -58,7 +60,14 @@ def test_behavioural_stimuli(network):
     outputs_max_vowel = outputs[:, 23:37].argmax(dim=1).tolist()
     outputs_phonemes = [english_phonemes.one_hot_to_phoneme('vowel', x) for x in outputs_max_vowel]
 
-    return dict(zip(behavioural_stimuli_dataloader.dl.dataset.df["orth"], outputs_phonemes))
+    # this computes the full output phonemes
+    # outputs_phonemes = [english_phonemes.expand_one_hot(x) for x in outputs.tolist()]
+
+    result = dict(zip(behavioural_stimuli_dataloader.dl.dataset.df["orth"], outputs_phonemes))
+    result_df = pd.DataFrame(result.items(), columns=["orth", "vowel"])
+    result_df.to_csv('/tmp/out.csv')
+
+    return result_df
 
 
 def main(train=False):
