@@ -35,7 +35,7 @@ behavioural_stimuli_dataloader = build_dataloader(
 
 english_phonemes = Phonemes()
 
-def train_base_vocabulary(do_training, trainer):
+def train_base_vocabulary(do_training, trainer, seed):
     optimizers = {
         0: optim.SGD(trainer.network.parameters(), lr=0.0001),
         10: optim.Adam(trainer.network.parameters(), lr=0.01)
@@ -48,9 +48,9 @@ def train_base_vocabulary(do_training, trainer):
             num_epochs=350,
             optimizers=optimizers
         )
-        trainer.network.save(filename="/tmp/pmsp-base-vocabulary.zip")
+        trainer.network.save(filename=f"/tmp/pmsp-base-vocabulary-{seed}.zip")
     else:
-        trainer.network.load(filename="/tmp/pmsp-base-vocabulary.zip")
+        trainer.network.load(filename=f"/tmp/pmsp-base-vocabulary-{seed}.zip")
 
 
 def test_behavioural_stimuli(network):
@@ -58,33 +58,39 @@ def test_behavioural_stimuli(network):
 
     outputs = network(graphemes)
     outputs_max_vowel = outputs[:, 23:37].argmax(dim=1).tolist()
-    outputs_phonemes = [english_phonemes.one_hot_to_phoneme('vowel', x) for x in outputs_max_vowel]
+    # outputs_phonemes = [english_phonemes.one_hot_to_phoneme('vowel', x) for x in outputs_max_vowel]
+
+    outputs_phonemes = [x for x in outputs_max_vowel]
 
     # this computes the full output phonemes
     # outputs_phonemes = [english_phonemes.expand_one_hot(x) for x in outputs.tolist()]
 
     result = dict(zip(behavioural_stimuli_dataloader.dl.dataset.df["orth"], outputs_phonemes))
-    result_df = pd.DataFrame(result.items(), columns=["orth", "vowel"])
-    result_df.to_csv('/tmp/out.csv')
 
-    return result_df
+    return result
 
 
 def main(train=False):
-    torch.manual_seed(1)
-    # folder = make_folder()
+    vowels_df = pd.DataFrame(behavioural_stimuli_dataloader.dl.dataset.df["orth"], columns=["orth"])
 
-    network = PMSPNetwork()
-    trainer = PMSPTrainer(network=network)
+    for seed in range(0, 2):
+        torch.manual_seed(seed)
 
-    ###
-    # Train base vocabulary
-    train_base_vocabulary(do_training=train, trainer=trainer)
+        network = PMSPNetwork()
+        trainer = PMSPTrainer(network=network)
 
-    ###
-    # Test with behavioural stimuli
-    vowels = test_behavioural_stimuli(trainer.network)
-    print(vowels)
+        ###
+        # Train base vocabulary
+        train_base_vocabulary(do_training=train, trainer=trainer, seed=seed)
+
+        ###
+        # Test with behavioural stimuli
+        vowels = test_behavioural_stimuli(trainer.network)
+        vowels_df[f"seed {seed}"] = vowels.values()
+
+        print(vowels_df)
+
+    vowels_df.to_csv('/tmp/out.csv')
 
 
 if __name__ == "__main__":
