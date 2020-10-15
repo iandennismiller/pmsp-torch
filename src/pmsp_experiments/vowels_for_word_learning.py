@@ -48,9 +48,9 @@ def train_base_vocabulary(do_training, trainer, seed):
             num_epochs=350,
             optimizers=optimizers
         )
-        trainer.network.save(filename=f"/tmp/pmsp-base-vocabulary-{seed}.zip")
+        trainer.network.save(filename=f"var/pmsp-base-vocabulary-{seed}.zip")
     else:
-        trainer.network.load(filename=f"/tmp/pmsp-base-vocabulary-{seed}.zip")
+        trainer.network.load(filename=f"var/pmsp-base-vocabulary-{seed}.zip")
 
 
 def test_behavioural_stimuli(network):
@@ -58,9 +58,9 @@ def test_behavioural_stimuli(network):
 
     outputs = network(graphemes)
     outputs_max_vowel = outputs[:, 23:37].argmax(dim=1).tolist()
-    # outputs_phonemes = [english_phonemes.one_hot_to_phoneme('vowel', x) for x in outputs_max_vowel]
+    outputs_phonemes = [english_phonemes.one_hot_to_phoneme('vowel', x) for x in outputs_max_vowel]
 
-    outputs_phonemes = [x for x in outputs_max_vowel]
+    # outputs_phonemes = [x for x in outputs_max_vowel]
 
     # this computes the full output phonemes
     # outputs_phonemes = [english_phonemes.expand_one_hot(x) for x in outputs.tolist()]
@@ -73,7 +73,7 @@ def test_behavioural_stimuli(network):
 def main(train=False):
     vowels_df = pd.DataFrame(behavioural_stimuli_dataloader.dl.dataset.df["orth"], columns=["orth"])
 
-    for seed in range(0, 2):
+    for seed in range(0, 30):
         torch.manual_seed(seed)
 
         network = PMSPNetwork()
@@ -90,7 +90,7 @@ def main(train=False):
 
         print(vowels_df)
 
-    vowels_df.to_csv('/tmp/out.csv')
+    vowels_df.to_csv('var/vowel-activations.csv')
 
 
 if __name__ == "__main__":
