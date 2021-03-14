@@ -21,13 +21,13 @@ def cli():
 @click.command('generate', short_help='Generate data.')
 @click.option('--wordfile', required=True, help='Word file to read from.')
 @click.option('--freqfile', required=True, help='Frequency file to read from.')
-@click.option('--normthe/--no-normthe', default=False, help='Normalize frequencies to THE.')
+@click.option('--thenormalized/--no-thenormalized', default=False, help='Normalize frequencies to THE.')
 @click.option('--outfile', required=True, help='File to write to.')
-def generate(wordfile, freqfile, normthe, outfile):
+def lens_stimuli(wordfile, freqfile, thenormalized, outfile):
     stimuli_df = build_stimuli_df(wordfile, freqfile)
 
     # normalize frequencies to THE? (i.e. freq / 69971)
-    if normthe:
+    if thenormalized:
         result = generate_stimuli_the_normalized(stimuli_df)
     else:
         result = generate_stimuli(stimuli_df)

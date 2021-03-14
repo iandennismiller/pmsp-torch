@@ -17,7 +17,7 @@ from torch.utils.data import DataLoader
 pd.options.mode.chained_assignment = None
 
 
-def build_stimuli_df(mapping_filename, frequency_filename):
+def build_stimuli_df(mapping_filename, frequency_filename, log_transform=False):
     """
     This takes a CSV file with a mapping from orthography to phonology in it.
     It produces a data frame containing one-hot encodings of the mapping.
@@ -67,9 +67,10 @@ def build_stimuli_df(mapping_filename, frequency_filename):
     # )
 
     # log transform frequency
-    df["frequency"] = df["frequency"].apply(
-        lambda x: log(x+2)
-    )
+    if log_transform:
+        df["frequency"] = df["frequency"].apply(
+            lambda x: log(x+2)
+        )
 
     return df
 

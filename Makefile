@@ -17,9 +17,10 @@ vowels-for-word-learning:
 	time src/scripts/pmsp.py vowels-for-word-learning --no-train
  
 generate-the-normalized:
-	bin/pmsp.py generate \
-		--wordfile pmsp/data/plaut_dataset_collapsed.csv \
-		--freqfile pmsp/data/word-frequencies.csv \
+	src/scripts/pmsp.py generate \
+		--thenormalized \
+		--wordfile src/pmsp/data/plaut_dataset_collapsed.csv \
+		--freqfile src/pmsp/data/word-frequencies.csv \
 		--outfile $(EXAMPLE_PATH)/pmsp-train-the-normalized.ex
 
 generate-lens-stimuli:
