@@ -16,7 +16,13 @@ vowels-for-word-learning:
 	@echo to train, make pmsp-1996 first or invoke with --train
 	time src/scripts/pmsp.py vowels-for-word-learning --no-train
  
-lens-stimuli:
+generate-the-normalized:
+	bin/pmsp.py generate \
+		--wordfile pmsp/data/plaut_dataset_collapsed.csv \
+		--freqfile pmsp/data/word-frequencies.csv \
+		--outfile $(EXAMPLE_PATH)/pmsp-train-the-normalized.ex
+
+generate-lens-stimuli:
 	mkdir -p $(EXAMPLE_PATH)
 
 	src/scripts/pmsp.py lens-stimuli \

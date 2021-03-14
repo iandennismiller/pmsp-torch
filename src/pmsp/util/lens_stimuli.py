@@ -58,3 +58,27 @@ def generate_stimuli_log_transform(df, percentage=0.5):
             count += 1
 
     return(buffer)
+
+def generate_stimuli_the_normalized(df):
+    """
+    Normalize frequencies relative to the word THE, with a frequency of 69971
+    """
+    result = ""
+    count = 0
+
+    for idx in range(0, len(df)):
+        item = df.iloc[idx, : ]
+        item['phon'] = re.sub(r'\W', '', item['phon'])
+        if item['type'] == '#': item['type'] = '0'
+        result += "name: {{{count}_{orth}_{phon}_{type}}}\n".format(count=count, **item)
+
+        result += "freq: {0:.9f}\n".format(round(item['frequency']/69971.0, 8))
+
+        in_vec = ' '.join(str(x) for x in item['graphemes'])
+        result += "I: {}\n".format(in_vec)
+
+        target_vec = ' '.join(str(x) for x in item['phonemes'])
+        result += "T: {};\n\n".format(target_vec)
+        count += 1
+
+    return(result)

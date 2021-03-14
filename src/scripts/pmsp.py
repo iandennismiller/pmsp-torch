@@ -10,20 +10,28 @@ import logging
 
 sys.path.insert(0, './src')
 
+from pmsp.stimuli import build_stimuli_df
+from pmsp.util.lens_stimuli import generate_stimuli, generate_stimuli_the_normalized
+
 @click.group()
 def cli():
     pass
 
 
-@click.command('lens-stimuli', short_help='Generate LENS example stimuli.')
+@click.command('generate', short_help='Generate data.')
 @click.option('--wordfile', required=True, help='Word file to read from.')
 @click.option('--freqfile', required=True, help='Frequency file to read from.')
+@click.option('--normthe/--no-normthe', default=False, help='Normalize frequencies to THE.')
 @click.option('--outfile', required=True, help='File to write to.')
-def lens_stimuli(wordfile, freqfile, outfile):
-    from pmsp.stimuli import build_stimuli_df
-    from pmsp.util.lens_stimuli import generate_stimuli
+def generate(wordfile, freqfile, normthe, outfile):
     stimuli_df = build_stimuli_df(wordfile, freqfile)
-    result = generate_stimuli(stimuli_df)
+
+    # normalize frequencies to THE? (i.e. freq / 69971)
+    if normthe:
+        result = generate_stimuli_the_normalized(stimuli_df)
+    else:
+        result = generate_stimuli(stimuli_df)
+
     with open(outfile, 'w') as f:
         f.write(result)
 
