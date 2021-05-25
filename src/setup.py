@@ -20,7 +20,7 @@ setup(
     name='pmsp-torch',
     description="PMSP implemented with Torch",
     scripts=[
-        "scripts/pmsp.py",
+        "scripts/pmsp-cli.py",
     ],
     long_description=read('../Readme.rst'),
     classifiers=[

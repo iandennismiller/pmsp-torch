@@ -4,20 +4,20 @@ all:
 	@echo OK
 
 pmsp-1996:
-	time src/scripts/pmsp.py pmsp-1996 --train
+	time src/scripts/pmsp-cli.py pmsp-1996 --train
 
 adkp-2017:
-	time src/scripts/pmsp.py adkp-2017 --train
+	time src/scripts/pmsp-cli.py adkp-2017 --train
 
 mdlpa-2020:
-	time src/scripts/pmsp.py mdlpa-2020 --train
+	time src/scripts/pmsp-cli.py mdlpa-2020 --train
 
 vowels-for-word-learning:
 	@echo to train, make pmsp-1996 first or invoke with --train
-	time src/scripts/pmsp.py vowels-for-word-learning --no-train
+	time src/scripts/pmsp-cli.py vowels-for-word-learning --no-train
  
 generate-the-normalized:
-	src/scripts/pmsp.py generate \
+	src/scripts/pmsp-cli.py generate \
 		--thenormalized \
 		--wordfile src/pmsp/data/plaut_dataset_collapsed.csv \
 		--freqfile src/pmsp/data/word-frequencies.csv \
@@ -26,27 +26,27 @@ generate-the-normalized:
 generate-lens-stimuli:
 	mkdir -p $(EXAMPLE_PATH)
 
-	src/scripts/pmsp.py lens-stimuli \
+	src/scripts/pmsp-cli.py lens-stimuli \
 		--wordfile src/pmsp/data/plaut_dataset_collapsed.csv \
 		--freqfile src/pmsp/data/word-frequencies.csv \
 		--outfile $(EXAMPLE_PATH)/pmsp-train.ex
 
-	src/scripts/pmsp.py lens-stimuli \
+	src/scripts/pmsp-cli.py lens-stimuli \
 		--wordfile src/pmsp/data/anchors_new1.csv \
 		--freqfile src/pmsp/data/word-frequencies.csv \
 		--outfile $(EXAMPLE_PATH)/anchors-n1.ex
 
-	src/scripts/pmsp.py lens-stimuli \
+	src/scripts/pmsp-cli.py lens-stimuli \
 		--wordfile src/pmsp/data/anchors_new2.csv \
 		--freqfile src/pmsp/data/word-frequencies.csv \
 		--outfile $(EXAMPLE_PATH)/anchors-n2.ex
 
-	src/scripts/pmsp.py lens-stimuli \
+	src/scripts/pmsp-cli.py lens-stimuli \
 		--wordfile src/pmsp/data/anchors_new3.csv \
 		--freqfile src/pmsp/data/word-frequencies.csv \
 		--outfile $(EXAMPLE_PATH)/anchors-n3.ex
 
-	src/scripts/pmsp.py lens-stimuli \
+	src/scripts/pmsp-cli.py lens-stimuli \
 		--wordfile src/pmsp/data/probes_new.csv \
 		--freqfile src/pmsp/data/word-frequencies.csv \
 		--outfile $(EXAMPLE_PATH)/probes-new.ex
